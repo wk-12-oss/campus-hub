@@ -1,0 +1,1628 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>智汇校园  | 赛博登录+吃瓜社区</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+		.modal { z-index: 2000; }
+		.cyber-modal { position: relative; z-index: 10; }
+		#globalParticlesCanvas {
+		    position: fixed;
+		    top: 0;
+		    left: 0;
+		    width: 100%;
+		    height: 100%;
+		    z-index: 1;
+		    pointer-events: none;
+		}
+		    	/* 我的中心简约白底样式 */
+		#myProfileModal .cyber-modal {
+		    background: #ffffff !important;
+		    color: #1e293b !important;
+		    border: 1px solid #e2e8f0 !important;
+		    box-shadow: 0 20px 40px rgba(0,0,0,0.08) !important;
+		    animation: none !important;
+		}
+		#myProfileModal .cyber-modal h2 {
+		    color: #1e293b !important;
+		    text-shadow: none !important;
+		}
+		#myProfileModal .profile-field label {
+		    color: #334155;
+		}
+		#myProfileModal .profile-field input,
+		#myProfileModal .profile-field select,
+		#myProfileModal .profile-field textarea {
+		    background: #f8fafc;
+		    border: 1px solid #cbd5e1;
+		    color: #1e293b;
+		}
+		#myProfileModal .my-tab {
+		    border-bottom-color: #e2e8f0;
+		}
+		#myProfileModal .my-tab span {
+		    color: #475569;
+		}
+		#myProfileModal .my-tab span.active {
+		    background: #2c5f8a !important;
+		    color: white !important;
+		}
+		#myProfileModal .record-item {
+		    border-bottom-color: #e2e8f0;
+		}
+		#myProfileModal .btn-sm {
+		    background: #2c5f8a;
+		}
+		#myProfileModal .cyber-btn {
+		    background: #2c5f8a;
+		    color: white;
+		}
+		#myProfileModal .modal-close-btn {
+		    color: #64748b;
+		}
+		#myProfileModal .modal-close-btn:hover {
+		    color: #ff008c;
+		}
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f4f7fc; color: #1e293b; line-height: 1.5; padding: 24px 32px; position: relative; }
+        .dashboard { max-width: 1600px; margin: 0 auto;  position: relative; z-index: 2; }
+        .header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 32px; background: white; padding: 16px 28px; border-radius: 32px; box-shadow: 0 8px 20px rgba(0,0,0,0.02), 0 2px 6px rgba(0,0,0,0.05); gap: 15px; }
+        .logo-area { flex: 0 0 auto; }
+        .logo-area h1 { font-size: 1.8rem; font-weight: 700; background: linear-gradient(135deg, #1e3c72, #2a5298); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .logo-area p { font-size: 0.85rem; color: #5b6e8c; }
+        .search-box { flex: 2; max-width: 400px; margin: 0 auto; background: #e6f0fa; border-radius: 40px; padding: 8px 20px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: 0.2s; }
+        .search-box i { color: #2c5f8a; font-size: 1rem; }
+        .search-box span { color: #5b6e8c; font-size: 0.9rem; flex: 1; }
+        .search-box:hover { background: #d4e2f0; }
+        .user-area { display: flex; align-items: center; gap: 20px; background: #f0f4f9; padding: 8px 20px; border-radius: 40px; flex-wrap: wrap; flex: 0 0 auto; }
+        .counter, .online-box, .notification-bell { background: #e6f0fa; border-radius: 30px; padding: 4px 12px; font-size: 0.8rem; font-weight: 500; cursor: pointer; position: relative; }
+        .notification-bell .badge { position: absolute; top: -5px; right: -5px; background: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 10px; }
+        .online-list-popup { position: absolute; top: 40px; right: 0; background: white; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 260px; padding: 12px; z-index: 200; display: none; max-height: 300px; overflow-y: auto; }
+        .online-box:hover .online-list-popup { display: block; }
+        .online-user-item { display: flex; align-items: center; gap: 10px; padding: 8px; border-radius: 30px; cursor: pointer; transition: 0.1s; }
+        .online-user-item:hover { background: #eef2ff; }
+        .user-info { display: flex; align-items: center; gap: 12px; }
+        .btn-outline-sm { background: transparent; border: 1px solid #2c5f8a; color: #2c5f8a; padding: 5px 12px; border-radius: 30px; cursor: pointer; transition: 0.2s; font-size: 0.8rem; }
+        .btn-outline-sm:hover { background: #2c5f8a; color: white; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 2000; }
+        .cyber-modal { position: relative; width: 100%; max-width: 750px; background: rgba(10,10,25,0.95); border: 1px solid #0ff; border-radius: 8px; box-shadow: 0 0 15px #0ff; padding: 30px; backdrop-filter: blur(5px); animation: borderFlicker 3s infinite alternate; color: #fff; max-height: 90vh; overflow-y: auto; }
+        @keyframes borderFlicker { 0%{border-color:#0ff;box-shadow:0 0 15px #0ff;} 100%{border-color:#ff008c;box-shadow:0 0 15px #ff008c;} }
+        .cyber-modal h2 { text-align: center; margin-bottom: 20px; text-shadow: 0 0 5px #0ff; }
+        .cyber-input { width: 100%; padding: 10px; background: rgba(0,0,0,0.6); border: 1px solid #0ff; border-radius: 4px; color: #0ff; margin-bottom: 15px; }
+        .cyber-btn { width: 100%; padding: 10px; background: linear-gradient(90deg,#0ff,#ff008c); border: none; border-radius: 4px; font-weight: bold; cursor: pointer; margin-top: 8px; }
+        .social-login { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+        .social-icon { font-size: 32px; cursor: pointer; color: #ccc; }
+        .switch-tab { display: flex; gap: 20px; justify-content: center; margin-bottom: 20px; }
+        .switch-tab span { cursor: pointer; padding: 6px 16px; border-radius: 40px; background: rgba(255,255,255,0.1); }
+        .active-tab { background: #0ff !important; color: #000; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 28px; margin-bottom: 28px; }
+        .card { background: white; border-radius: 28px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); overflow: hidden; transition: 0.2s; }
+        .card:hover { transform: translateY(-3px); }
+        .card-header { padding: 18px 24px 12px; border-bottom: 1px solid #eef2f6; display: flex; align-items: center; gap: 12px; cursor: pointer; }
+        .card-header i { font-size: 1.6rem; color: #2c5f8a; }
+        .card-header h2 { font-size: 1.35rem; font-weight: 600; }
+        .card-body { padding: 20px 24px; max-height: 380px; overflow-y: auto; }
+        .card-footer { padding: 12px 24px 20px; border-top: 1px solid #eef2f6; background: #fafcff; }
+        .list-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #ecf3f9; }
+        .tag { background: #eef2ff; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; }
+        .btn-sm { background: #2c5f8a; border: none; color: white; padding: 6px 14px; border-radius: 30px; font-size: 0.7rem; cursor: pointer; }
+        .timetable { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+        .timetable th, .timetable td { border: 1px solid #e2e8f0; padding: 8px 4px; text-align: center; }
+        .editable-cell { cursor: pointer; transition: 0.1s; }
+        .editable-cell:hover { background: #eef2ff; }
+        .post-card { background: #f9fafc; border-radius: 20px; padding: 12px; margin-bottom: 16px; border-left: 4px solid #0ff; cursor: pointer; transition: 0.1s; }
+        .post-card:hover { transform: translateX(2px); }
+        .post-title { font-weight: bold; display: flex; justify-content: space-between; }
+        .post-meta { font-size: 0.7rem; color: gray; margin: 5px 0; }
+        .post-meta span.author-name { color: #2c5f8a; font-weight: 500; text-decoration: underline; cursor: pointer; }
+        .post-actions i { margin-right: 12px; cursor: pointer; }
+        .comment-section { margin-top: 8px; font-size: 0.7rem; background: #fff; padding: 6px; border-radius: 16px; }
+        .avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; background: #ccc; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
+        .profile-preview { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+        .profile-field { margin-bottom: 12px; }
+        .profile-field label { display: inline-block; width: 70px; }
+        .profile-field input, .profile-field select, .profile-field textarea { background: rgba(0,0,0,0.6); border: 1px solid #0ff; border-radius: 20px; padding: 6px 12px; color: #0ff; width: 100%; }
+        .my-tab { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid #0ff; flex-wrap: wrap; }
+        .my-tab span { padding: 8px 16px; cursor: pointer; }
+        .my-tab .active { background: #0ff; color: #000; border-radius: 30px; }
+        .record-item { padding: 8px; border-bottom: 1px solid #333; cursor: pointer; }
+        .new-post-modal .cyber-modal, .edit-profile-modal .cyber-modal { max-width: 700px; }
+        textarea, input[type="text"], select { width: 100%; padding: 10px; margin: 8px 0; border-radius: 20px; border: 1px solid #ccc; }
+        .image-preview { max-width: 100px; margin: 5px; border-radius: 12px; }
+        .secondhand-publish { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+        .secondhand-publish input { flex: 1; min-width: 100px; }
+        .file-label { background: #2c5f8a; padding: 6px 12px; border-radius: 30px; color: white; font-size: 0.7rem; cursor: pointer; display: inline-block; margin: 5px 0; }
+        .file-label:hover { background: #1f4668; }
+        .random-avatar-btn { background: #ff008c; padding: 5px 10px; border-radius: 20px; font-size: 0.7rem; cursor: pointer; margin-left: 8px; }
+        .bio-text { font-size: 0.85rem; color: #aaa; margin-top: 5px; font-style: italic; }
+        .reply-item { margin-left: 20px; border-left: 2px solid #0ff; padding-left: 10px; margin-top: 8px; }
+        .detail-stats span { margin-right: 20px; cursor: pointer; }
+        .user-list-popup { background: #1e1e3a; border-radius: 16px; padding: 10px; max-height: 200px; overflow-y: auto; }
+        .notification-list { max-height: 300px; overflow-y: auto; }
+        .notification-item { padding: 8px; border-bottom: 1px solid #555; font-size: 0.8rem; }
+        .report-btn { font-size: 0.7rem; background: #ff5555; padding: 2px 8px; border-radius: 20px; margin-left: 8px; cursor: pointer; }
+        .fullscreen-modal { max-width: 1200px; width: 90%; }
+        .community-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; margin-top: 20px; }
+        .community-post-card { background: #1e1e3a; border-radius: 20px; padding: 16px; border-left: 4px solid #0ff; cursor: pointer; transition: 0.1s; }
+        .community-post-card:hover { transform: translateY(-2px); background: #2a2a4a; }
+        .modal-close-btn { position: absolute; top: 12px; right: 18px; font-size: 1.8rem; color: #0ff; cursor: pointer; z-index: 10; transition: 0.2s; }
+        .modal-close-btn:hover { color: #ff008c; transform: scale(1.2); }
+        .takeaway-item:hover {
+		    background: #f0f4ff;
+		    border-radius: 16px;
+		    cursor: pointer;
+		}
+		.order-food-btn {
+		    background: #f59e0b;
+		    color: white;
+		    border: none;
+		    font-size: 0.7rem;
+		    padding: 4px 10px;
+		    border-radius: 20px;
+		    cursor: pointer;
+		}
+		.order-food-btn:hover {
+		    background: #d97706;
+		}
+		.cyber-modal {
+		    position: relative;
+		    z-index: 10;
+		}
+		#globalParticlesCanvas {
+		    z-index: 1;          
+		}
+				/* ========== 手机端适配 ========== */
+		@media (max-width: 768px) {
+		    body {
+		        padding: 12px 8px;
+		    }
+		
+		    .header {
+		        flex-direction: column;
+		        align-items: stretch;
+		        padding: 12px 16px;
+		        border-radius: 20px;
+		        gap: 10px;
+		    }
+		
+		    .logo-area h1 {
+		        font-size: 1.3rem;
+		    }
+		
+		    .search-box {
+		        max-width: 100%;
+		        margin: 0;
+		    }
+		
+		    .user-area {
+		        justify-content: center;
+		        flex-wrap: wrap;
+		        gap: 8px;
+		    }
+		
+		    .grid {
+		        grid-template-columns: 1fr; /* 所有卡片全部单列 */
+		        gap: 16px;
+		    }
+		
+		    .card {
+		        border-radius: 20px;
+		    }
+		
+		    .card-body {
+		        max-height: 250px;
+		    }
+		
+		    .card-header h2 {
+		        font-size: 1.1rem;
+		    }
+		
+		    .card-footer {
+		        padding: 10px 16px;
+		    }
+		
+		    .post-card {
+		        padding: 10px;
+		    }
+		
+		    /* 表单项适配 */
+		    .secondhand-publish input,
+		    .card-footer input[type="text"],
+		    .card-footer select {
+		        min-width: 100%;
+		        margin-bottom: 8px;
+		    }
+		
+		    /* 课表横向滚动 */
+		    .timetable {
+		        font-size: 0.65rem;
+		    }
+		    .timetable th, .timetable td {
+		        padding: 4px 2px;
+		    }
+		
+		    /* 弹窗全屏+圆角移除 */
+		    .cyber-modal {
+		        max-width: 100% !important;
+		        width: 100% !important;
+		        height: 100vh;
+		        border-radius: 0 !important;
+		        padding: 20px 15px;
+		        margin: 0;
+		        overflow-y: auto;
+		    }
+		    .modal {
+		        padding: 0;
+		    }
+		    .fullscreen-modal {
+		        width: 100% !important;
+		    }
+		
+		    /* 按钮文字缩小 */
+		    .btn-sm {
+		        font-size: 0.65rem;
+		        padding: 4px 10px;
+		    }
+		
+		    /* 在线列表弹窗位置修正 */
+		    .online-list-popup {
+		        width: 260px;
+		        right: -20px;
+		    }
+		
+		    /* 外卖/快递/活动列表项竖向排列 */
+		    .list-item {
+		        flex-direction: column;
+		        align-items: flex-start;
+		        gap: 8px;
+		    }
+		    .list-item > div:last-child {
+		        align-self: flex-end;
+		    }
+		
+		    /* 外卖图片适当缩小 */
+		    .takeaway-item img {
+		        width: 60px;
+		        height: 60px;
+		    }
+		
+		    /* 粒子画布优化（避免耗电） */
+		    #globalParticlesCanvas {
+		        opacity: 0.7;
+		    }
+		}
+    </style>
+</head>
+<body>
+	<canvas id="globalParticlesCanvas"></canvas>
+<div id="particles-cyber" style="position:fixed; top:0; left:0; width:100%; height:100%; z-index:999; pointer-events:none; display:none;"></div>
+<div class="dashboard">
+    <div class="header">
+        <div class="logo-area"><h1><i class="fas fa-graduation-cap"></i> 智汇校园 · 跨校平台</h1><p>多校融合 | 吃瓜社区 | 智慧服务</p></div>
+        <div class="search-box" id="globalSearchBtn"><i class="fas fa-search"></i><span>搜索帖子、用户...</span></div>
+        <div class="user-area">
+            <div class="counter"><i class="fas fa-eye"></i> 访问: <span id="visitCount">0</span></div>
+            <div class="online-box"><i class="fas fa-users"></i> 在线: <span id="onlineCount">0</span><div class="online-list-popup" id="onlineListPopup"><div id="onlineUserList">加载中...</div></div></div>
+            <div class="notification-bell" id="notificationBell"><i class="fas fa-bell"></i><span id="notificationBadge" class="badge" style="display:none;">0</span><div class="online-list-popup" id="notificationPopup" style="width:300px; right:auto; left:0;"><div id="notificationList" class="notification-list">暂无通知</div></div></div>
+            <div id="authDisplay" class="user-info"><i class="fas fa-user-circle"></i><span id="usernameDisplay">游客模式</span><button id="loginBtn" class="btn-outline-sm">登录/注册</button><button id="myProfileBtn" class="btn-outline-sm" style="display:none;"><i class="fas fa-user"></i> 我的</button></div>
+        </div>
+    </div>
+    <div id="dynamicContent"></div>
+</div>
+
+<!-- 赛博登录模态框 -->
+<div id="authModal" class="modal"><div class="cyber-modal"><h2><i class="fas fa-skull"></i> 霓虹登录</h2><div class="switch-tab"><span id="tabLogin" class="active-tab">账号登录</span><span id="tabRegister">注册</span></div><div id="loginForm"><input type="text" id="loginPhone" class="cyber-input" placeholder="11位手机号" maxlength="11"><input type="password" id="loginPassword" class="cyber-input" placeholder="密码"><button id="doLogin" class="cyber-btn">登录</button></div><div id="registerForm" style="display:none;"><input type="text" id="regPhone" class="cyber-input" placeholder="11位手机号" maxlength="11"><input type="password" id="regPassword" class="cyber-input" placeholder="密码">
+<div style="position: relative;">
+    <input type="text" id="regSchoolSearch" class="cyber-input" placeholder="输入学校关键词搜索（如'贵州'、'清华'）" autocomplete="off" style="margin-bottom:0;">
+    <div id="regSchoolDropdown" style="display:none; position: absolute; top: 100%; left: 0; width: 100%; max-height: 200px; overflow-y: auto; background: #1a1a2e; border: 1px solid #0ff; border-radius: 4px; z-index: 9999;"></div>
+    <input type="hidden" id="regSchool" value="">
+</div>
+<button id="doRegister" class="cyber-btn">立即注册</button></div><div class="social-login"><i class="fab fa-weixin social-icon" id="wechatLogin"></i><i class="fab fa-qq social-icon" id="qqLogin"></i></div><button id="closeModal" class="cyber-btn" style="background:#333;">关闭</button></div></div>
+
+<!-- 搜索模态框 -->
+<div id="searchModal" class="modal"><div class="cyber-modal"><h2><i class="fas fa-search"></i> 全局搜索</h2><input type="text" id="searchKeyword" class="cyber-input" placeholder="搜索帖子标题/内容或用户昵称/手机号"><button id="doSearch" class="cyber-btn">搜索</button><div id="searchResults" style="margin-top:20px; max-height:400px; overflow-y:auto;"></div><button id="closeSearchModal" class="cyber-btn" style="background:#333;">关闭</button></div></div>
+
+<!-- 帖子详情模态框 -->
+<div id="postDetailModal" class="modal"><div class="cyber-modal" style="max-width:800px;"><div id="postDetailContent"></div><button id="closeDetailModal" class="cyber-btn" style="background:#333; margin-top:20px;">关闭</button></div></div>
+
+<!-- 独立的吃瓜社区广场模态框 -->
+<div id="communityModal" class="modal"><div class="cyber-modal fullscreen-modal" style="max-width: 1200px; width: 90%;"><h2><i class="fas fa-newspaper"></i> 🍉 吃瓜社区广场 · 热门榜</h2><div id="communityPostsContainer" style="max-height: 70vh; overflow-y: auto; margin-top: 20px;"></div><button id="closeCommunityModal" class="cyber-btn" style="background:#333; margin-top:20px;">关闭</button></div></div>
+
+<!-- 我的个人中心模态框 -->
+<div id="myProfileModal" class="modal"><div class="cyber-modal edit-profile-modal" style="max-width:600px;"><h2><i class="fas fa-id-card"></i> 我的中心</h2><div class="profile-preview"><img id="myAvatar" class="avatar" src="https://randomuser.me/api/portraits/lego/1.jpg"><div><button id="randomAvatarBtn" class="random-avatar-btn">随机头像</button><button id="uploadAvatarBtn" class="file-label" style="margin-left:5px;">上传头像</button><input type="file" id="avatarFileInput" accept="image/*" style="display:none;"></div></div><div class="profile-field"><label>我的ID:</label><input type="text" id="myUserIdDisplay" readonly style="background:rgba(0,0,0,0.6); border:1px solid #0ff; color:#0ff; width:100%;"></div><div class="profile-field"><label>昵称:</label><input type="text" id="editNickname" placeholder="昵称"></div><div class="profile-field"><label>性别:</label><select id="editGender"><option>男</option><option>女</option><option>保密</option></select></div><div class="profile-field"><label>个性签名:</label><textarea id="editBio" rows="2" placeholder="写点什么吧..."></textarea></div><button id="saveProfileBtn" class="cyber-btn" style="margin-top:10px;">保存修改</button><div class="my-tab"><span id="tabViewHistory" class="active">浏览记录</span><span id="tabPostHistory">我的发布</span><span id="tabInteractHistory">评论/点赞</span><span id="tabCollectionHistory">我的收藏</span><span id="tabNotifications">通知中心</span></div><div id="historyContent" style="max-height:300px; overflow-y:auto;"></div><button id="closeProfileModal" class="cyber-btn" style="margin-top:20px;">关闭</button></div></div>
+
+<!-- 他人主页模态框 -->
+<div id="otherProfileModal" class="modal"><div class="cyber-modal" style="max-width:600px;"><h2><i class="fas fa-user-friends"></i> 用户主页</h2><div id="otherProfileContent"></div><button id="closeOtherModal" class="cyber-btn" style="margin-top:20px;">关闭</button></div></div>
+
+<!-- 发布新瓜全屏界面 -->
+<div id="newPostModal" class="modal"><div class="cyber-modal new-post-modal" style="max-width:700px;"><h2><i class="fas fa-feather-alt"></i> 发布新瓜 · 分享校园新鲜事</h2><input type="text" id="postTitle" placeholder="标题" class="cyber-input"><textarea id="postContent" rows="4" placeholder="内容..." class="cyber-input"></textarea><div><label class="file-label" for="postImageFile"><i class="fas fa-image"></i> 上传图片</label> <input type="file" id="postImageFile" accept="image/*" style="display:none;"><div id="postImagePreview"></div></div><div><label class="file-label" for="postVideoFile"><i class="fas fa-video"></i> 上传视频</label><input type="file" id="postVideoFile" accept="video/*" style="display:none;"><div id="postVideoPreview"></div></div><button id="submitNewPost" class="cyber-btn">立即发布</button><button id="closeNewPostModal" class="cyber-btn" style="background:#333; margin-top:10px;">取消</button></div></div>
+<!-- 场馆预约弹窗 -->
+<div id="reserveModal" class="modal">
+    <div class="cyber-modal" style="max-width:500px;">
+        <h2><i class="fas fa-calendar-check"></i> 场馆预约</h2>
+        <div id="reserveVenueName" style="text-align:center; margin-bottom:15px;"></div>
+        <input type="text" id="reservePerson" class="cyber-input" placeholder="预约人姓名">
+        <input type="text" id="reserveStudentId" class="cyber-input" placeholder="学号">
+        <input type="date" id="reserveDate" class="cyber-input">
+        <input type="time" id="reserveStartTime" class="cyber-input">
+        <select id="reserveDuration" class="cyber-input">
+            <option value="1">1小时</option><option value="2">2小时</option><option value="4">半天</option>
+        </select>
+        <input type="number" id="reservePersons" class="cyber-input" placeholder="预约人数" min="1">
+        <button id="submitReserveBtn" class="cyber-btn">确认预约</button>
+        <button id="closeReserveModal" class="cyber-btn" style="background:#333; margin-top:10px;">取消</button>
+    </div>
+</div>
+<!-- 外卖下单模态框 -->
+<div id="orderModal" class="modal">
+    <div class="cyber-modal" style="max-width:500px;">
+        <h2><i class="fas fa-utensils"></i> 确认下单</h2>
+        <div id="orderFoodName" style="text-align:center; font-size:1.2rem; margin-bottom:15px;"></div>
+        <input type="text" id="orderReceiver" class="cyber-input" placeholder="收货人姓名">
+        <input type="text" id="orderAddress" class="cyber-input" placeholder="收货地址（楼栋-宿舍号）">
+        <div class="cyber-input" style="padding:0;border:none;background:transparent;">
+            <label style="display:flex; align-items:center; gap:10px;">
+                <span>期望配送时间：</span>
+                <select id="orderTimeOption" style="background:rgba(0,0,0,0.6); border:1px solid #0ff; color:#0ff; border-radius:4px; padding:6px;">
+                    <option value="now">立即配送</option>
+                    <option value="book">预约时间</option>
+                </select>
+            </label>
+            <input type="datetime-local" id="orderBookTime" class="cyber-input" style="display:none; margin-top:8px;">
+        </div>
+        <textarea id="orderRemark" class="cyber-input" placeholder="备注（忌口、口味等）"></textarea>
+        <label style="display:flex; align-items:center; gap:10px; margin:10px 0; color:#0ff;">
+            <input type="checkbox" id="orderNeedCutlery" checked> 需要餐具
+        </label>
+        <button id="submitOrderBtn" class="cyber-btn">提交订单</button>
+        <button id="closeOrderModal" class="cyber-btn" style="background:#333; margin-top:10px;">取消</button>
+    </div>
+</div>
+
+<script>
+	const API_BASE = window.location.origin + '/api';
+		// 学校搜索自动完成
+	let schoolSearchTimer;
+	document.getElementById('regSchoolSearch')?.addEventListener('input', function(e) {
+	  clearTimeout(schoolSearchTimer);
+	  const keyword = this.value.trim();
+	  const hidden = document.getElementById('regSchool');
+	  const dropdown = document.getElementById('regSchoolDropdown');
+	
+	  if (!keyword) {
+	    dropdown.style.display = 'none';
+	    hidden.value = '';
+	    return;
+	  }
+	
+	  schoolSearchTimer = setTimeout(async () => {
+	    const res = await fetch(`${API_BASE}/schools?keyword=${encodeURIComponent(keyword)}`);
+	    const schools = await res.json();
+	    if (schools.length === 0) {
+	      dropdown.innerHTML = '<div style="padding:8px;color:#ccc;">未找到匹配学校</div>';
+	    } else {
+	      dropdown.innerHTML = schools.map(s =>
+	        `<div style="padding:8px;cursor:pointer;color:#0ff;" data-school="${s.school}" data-name="${s.name}">${s.name}</div>`
+	      ).join('');
+	    }
+	    dropdown.style.display = 'block';
+	
+	    // 点击选项
+	    dropdown.querySelectorAll('div[data-school]').forEach(div => {
+	      div.addEventListener('click', function() {
+	        document.getElementById('regSchoolSearch').value = this.dataset.name;
+	        hidden.value = this.dataset.school;
+	        dropdown.style.display = 'none';
+	      });
+	    });
+	  }, 300);
+	});
+	
+	// 隐藏下拉当点击别处
+	document.addEventListener('click', function(e) {
+	  const container = document.getElementById('regSchoolSearch')?.parentNode;
+	  if (container && !container.contains(e.target)) {
+	    document.getElementById('regSchoolDropdown').style.display = 'none';
+	  }
+	});
+    // ---------- 学校原始数据(保持不变) ----------
+    const schoolDataRaw = { gznj: { name:"贵州黔南经济学院", timetable:{ mon:[["高等数学","教2-101"],["",""],["数据库原理","计科机房"],["",""]], tue:[["",""],["数据结构","信工楼408"],["",""],["形势与政策","大礼堂"]], wed:[["高等数学","教2-101"],["",""],["思政实践","文华楼"],["",""]], thu:[["大学英语","文德楼C302"],["数据结构","信工楼408"],["Web开发","创客空间"],["",""]], fri:[["大学英语","文德楼C302"],["体育","体育馆"],["",""],["班会","院办"]] }, 
+    activities:[{ name:"金融投资模拟大赛宣讲会", date:"4月3日 19:00", location:"经管楼报告厅", capacity:120, current:58 },{ name:"计算机国际学术交流会", date:"4月5日 8:00", location:"博学楼302", capacity:60, current:58 },{ name:"教学质量分析研讨会", date:"4月4日 19:00", location:"致远楼504", capacity:80, current:45 },{ name:"学生离校工作协调会", date:"4月8日 15:00", location:"1号会议室", capacity:20, current:12 },], secondhand:[{ name:"经济学原理（曼昆）", price:"25元", seller:"李学姐", desc:"九成新", media:"", publisherPhone:"15187492838"  }],
+	reservations: [
+	    { name:"研讨室(经管楼302)", status:"可预约", timeSlot:"4月2日 15:00-17:00", maxCapacity:10, bookedCount:3 },
+	    { name:"羽毛球馆A场", status:"可预约", timeSlot:"4月3日 08:00-22:00", maxCapacity:20, bookedCount:8 },
+	    { name:"篮球馆全场", status:"可预约", timeSlot:"4月3日 08:00-22:00", maxCapacity:30, bookedCount:15 },
+	    { name:"乒乓球室", status:"可预约", timeSlot:"4月2日 14:00-16:00", maxCapacity:6, bookedCount:2 }
+	], recommendActivities:[], materials:"《经济学人》双语精读", express:[{ num:"SF1234567890", type:"顺丰", status:"待取", location:"菜鸟驿站1号柜", reward:"3元", address:"明德楼3楼302", receiveTime:"4月2日 14:00-16:00", receiverName:"张三", receiverPhone:"13800138000", publisherPhone:"" }],
+	takeaway: [
+	    { name:"烤肉拌饭", shop:"校园美食城", price:"12.88元", rating:"4.8", delivery:"15分钟", monthSales:3000, image:"images/food1.jpg" },
+	    { name:"贵州特色怪噜蛋炒饭", shop:"黔味坊", price:"10.99元", rating:"4.9", delivery:"10分钟", monthSales:2000, image:"images/food2.jpg" },
+	    { name:"螺蛳粉", shop:"螺鼎记", price:"16.99元", rating:"4.7", delivery:"18分钟", monthSales:1000, image:"images/food3.jpg" },
+	    { name:"隆江猪脚饭", shop:"潮汕风味", price:"16.8元", rating:"4.8", delivery:"20分钟", monthSales:800, image:"images/food4.jpg" },
+	    { name:"红烧牛肉炒饭", shop:"川香小厨", price:"24.8元", rating:"4.6", delivery:"20分钟", monthSales:500, image:"images/food5.jpg" },
+	    { name:"福建千里香馄饨", shop:"千里香", price:"18元", rating:"4.9", delivery:"15分钟", monthSales:600, image:"images/food6.jpg" },
+	    { name:"黄焖鸡米饭", shop:"杨铭宇", price:"19.9元", rating:"4.8", delivery:"15分钟", monthSales:1200, image:"images/food7.jpg" },
+	    { name:"麻辣香锅", shop:"麻辣诱惑", price:"28元", rating:"4.7", delivery:"25分钟", monthSales:900, image:"images/food8.jpg" }
+	] }, tsinghua:{ name:"清华大学", timetable:{ mon:[["微积分A","6A101"],["",""],["大学物理","6A201"],["",""]], tue:[["",""],["程序设计基础","东主楼"],["",""],["形势与政策","大礼堂"]], wed:[["微积分A","6A101"],["",""],["英语读写","文北楼"],["",""]], thu:[["英语听说","三教"],["程序设计上机","计算中心"],["体育","西体"],["",""]], fri:[["",""],["线性代数","6B102"],["",""],["班会","系馆"]] }, activities:[{ name:"清华x-lab创业沙龙", date:"4月4日 15:00", location:"李兆基楼", capacity:60, current:40 }], secondhand:[{ name:"工程力学课本", price:"30元", seller:"清华学长", desc:"含笔记", media:"" }], reservations:[{ name:"李文正馆研讨间", status:"可预约", timeSlot:"4月2日 13:00-15:00" }], recommendActivities:[], materials:"清华学堂在线", express:[{ num:"SF1112223334", type:"顺丰", status:"待取", location:"紫荆公寓快递站", reward:"5元", address:"紫荆公寓1号楼", receiveTime:"4月3日 10:00-12:00", receiverName:"李四", receiverPhone:"13900139000", publisherPhone:"" }], takeaway:[{ name:"清华园食堂套餐", shop:"清华园食堂", price:"20元", rating:"4.9", delivery:"10分钟" }] }, zju:{ name:"浙江大学", timetable:{ mon:[["微积分","西1-101"],["",""],["大学英语","东1-201"],["",""]], tue:[["",""],["C语言","机房A"],["",""],["思政","蒙民伟楼"]], wed:[["微积分","西1-101"],["",""],["大学物理","东2-102"],["",""]], thu:[["英语视听说","东6-303"],["数据结构","曹光彪楼"],["体育","体育馆"],["",""]], fri:[["",""],["线性代数","西2-301"],["",""],["班会","院楼"]] }, activities:[{ name:"求是大讲堂·人工智能", date:"4月3日 18:30", location:"紫金港校区", capacity:200, current:145 }], secondhand:[{ name:"机械制图习题集", price:"12元", seller:"玉泉校区", desc:"全新", media:"" }], reservations:[{ name:"基础图书馆小组研习室", status:"可预约", timeSlot:"4月2日 14:00-16:00" }], recommendActivities:[], materials:"浙大慕课平台", express:[{ name:"ZTO123456789", type:"中通", status:"待取", location:"紫金港菜鸟驿站", reward:"4元", address:"东区教学楼", receiveTime:"4月2日 16:00", receiverName:"王五", receiverPhone:"13700137000", publisherPhone:"" }], takeaway:[{ name:"杭帮菜套餐", shop:"紫金港食堂", price:"22元", rating:"4.8", delivery:"12分钟" }] }, scu:{ name:"四川大学", timetable:{ mon:[["高等数学","综A101"],["",""],["大学化学","二基楼"],["",""]], tue:[["",""],["Java程序设计","计科楼"],["",""],["近代史","江安一教"]], wed:[["高等数学","综A101"],["",""],["大学英语","综B304"],["",""]], thu:[["英语听说","外文楼"],["数据结构","基教C座"],["体育","体育馆"],["",""]], fri:[["",""],["线性代数","综C207"],["",""],["形势政策","水上报告厅"]] }, activities:[{ name:"江安论坛·巴蜀文化", date:"4月5日 15:00", location:"江安文科楼", capacity:80, current:55 }], secondhand:[{ name:"临床医学教材", price:"40元", seller:"华西学长", desc:"含重点", media:"" }], reservations:[{ name:"江安图书馆研修室", status:"可预约", timeSlot:"4月3日 10:00-12:00" }], recommendActivities:[], materials:"川大数字图书馆", express:[{ num:"STO987654321", type:"申通", status:"待取", location:"江安校区快递站", reward:"3元", address:"江安花园2栋", receiveTime:"4月4日 12:00", receiverName:"赵六", receiverPhone:"13600136000", publisherPhone:"" }], takeaway:[{ name:"麻辣香锅", shop:"江安后街川味馆", price:"25元", rating:"4.9", delivery:"18分钟" }] } };
+    let schoolData = JSON.parse(JSON.stringify(schoolDataRaw));
+    let customSecondhand = JSON.parse(localStorage.getItem("customSecondhand") || "{}");
+    for(let school in customSecondhand) if(schoolData[school]) schoolData[school].secondhand = customSecondhand[school].concat(schoolData[school].secondhand);
+    function saveCustomSecondhand(){ let save = {}; for(let s in schoolData) save[s] = schoolData[s].secondhand; localStorage.setItem("customSecondhand", JSON.stringify(save)); }
+
+    let globalPosts = [], nextPostId = 1;
+    let customTimetables = JSON.parse(localStorage.getItem("customTimetables") || "{}");
+    const ADMIN_PHONE = "12345678910", ADMIN_PWD = "qwertyuiopasdfghjkl";
+    let currentUser = null, visitCount = 0, currentSchool = "gznj";
+    let repairs = [];
+    let contactBtnClicked = false;
+    let userProfiles = JSON.parse(localStorage.getItem("userProfiles") || "{}");
+    let userActions = JSON.parse(localStorage.getItem("userActions") || "{}");
+    let userNotifications = JSON.parse(localStorage.getItem("userNotifications") || "{}");
+    let nextUserId = parseInt(localStorage.getItem("nextUserId") || "1");
+    let users = JSON.parse(localStorage.getItem("users") || "[]");
+
+    let customExpress = JSON.parse(localStorage.getItem("customExpress") || "{}");
+	    // ---------- 关注与私信系统 ----------
+	let userFollows = JSON.parse(localStorage.getItem("userFollows") || "{}"); // { phone: [followedPhones] }
+	let privateMessages = JSON.parse(localStorage.getItem("privateMessages") || "{}"); // { phone: [{ from, to, content, time }] }
+	function saveFollows() { localStorage.setItem("userFollows", JSON.stringify(userFollows)); }
+	function saveMessages() { localStorage.setItem("privateMessages", JSON.stringify(privateMessages)); }
+	
+	function isFollowing(followerPhone, targetPhone) {
+	    return userFollows[followerPhone] && userFollows[followerPhone].includes(targetPhone);
+	}
+	function toggleFollow(followerPhone, targetPhone) {
+	    if (!userFollows[followerPhone]) userFollows[followerPhone] = [];
+	    const idx = userFollows[followerPhone].indexOf(targetPhone);
+	    if (idx === -1) {
+	        userFollows[followerPhone].push(targetPhone);
+	        addNotification(targetPhone, `${userProfiles[followerPhone]?.nickname || followerPhone} 关注了你`);
+	    } else {
+	        userFollows[followerPhone].splice(idx, 1);
+	    }
+	    saveFollows();
+	}
+	
+	function sendPrivateMessage(fromPhone, toPhone, content) {
+	    const msg = { from: fromPhone, to: toPhone, content, time: new Date().toLocaleString() };
+	    if (!privateMessages[fromPhone]) privateMessages[fromPhone] = [];
+	    privateMessages[fromPhone].push(msg);
+	    if (!privateMessages[toPhone]) privateMessages[toPhone] = [];
+	    privateMessages[toPhone].push(msg);
+	    saveMessages();
+	    addNotification(toPhone, `你收到来自 ${userProfiles[fromPhone]?.nickname || fromPhone} 的私信：${content}`);
+	}
+	function saveCustomExpress() {
+		    // 数据已存服务器，此处不再需要 localStorage
+	}
+    function generateUserId() { let id = String(nextUserId).padStart(6, '0'); nextUserId++; localStorage.setItem("nextUserId", nextUserId); return id; }
+    
+    function addNotification(targetPhone, message) {
+        if(!targetPhone || targetPhone === 'guest') return;
+        let notifs = userNotifications[targetPhone] || [];
+        notifs.unshift({ msg: message, read: false, timestamp: new Date().toLocaleString() });
+        userNotifications[targetPhone] = notifs;
+        localStorage.setItem("userNotifications", JSON.stringify(userNotifications));
+        if(currentUser && currentUser.phone === targetPhone) updateNotificationBadge();
+    }
+    function updateNotificationBadge() {
+        let notifs = userNotifications[currentUser?.phone] || [];
+        let unread = notifs.filter(n=>!n.read).length;
+        let badge = document.getElementById("notificationBadge");
+        if(unread>0) { badge.style.display="inline-block"; badge.innerText=unread; }
+        else badge.style.display="none";
+        let listDiv = document.getElementById("notificationList");
+        if(listDiv) {
+            listDiv.innerHTML = notifs.length ? notifs.map((n,idx)=>`<div class="notification-item" data-notif-idx="${idx}">${n.msg}<br><small>${n.timestamp}</small></div>`).join('') : "暂无通知";
+            document.querySelectorAll('.notification-item').forEach(el=>{
+                el.addEventListener('click',(e)=>{
+                    let idx = parseInt(el.dataset.notifIdx);
+                    if(!isNaN(idx) && userNotifications[currentUser.phone]?.[idx]) userNotifications[currentUser.phone][idx].read=true;
+                    localStorage.setItem("userNotifications", JSON.stringify(userNotifications));
+                    updateNotificationBadge();
+                });
+            });
+        }
+    }
+	async function initPosts() {
+	    try {
+	        const res = await fetch(`${API_BASE}/posts`);
+	        const serverPosts = await res.json();
+	        globalPosts = serverPosts.map(p => ({
+	            id: p.id,
+	            title: p.title,
+	            content: p.content,
+	            images: p.images ? (Array.isArray(p.images) ? p.images : p.images.split(',')) : [],
+	            video: p.video || '',
+	            likeCount: p.like_count || 0,
+	            commentCount: p.comment_count || 0,
+	            viewCount: p.view_count || 0,
+	            isTop: p.is_top || false,
+	            // ⚠️ 关键：把下划线字段改成驼峰
+	            authorId: p.author_id || '',
+	            author: p.author_nickname || '匿名',
+	            time: p.created_at || '',
+	            timestamp: p.timestamp || Date.now(),
+	            likedBy: JSON.parse(p.liked_by || '[]'),
+	            collectedBy: JSON.parse(p.collected_by || '[]'),
+	            sharedBy: JSON.parse(p.shared_by || '[]'),
+	            comments: p.comments || []
+	        }));
+	        nextPostId = Math.max(...globalPosts.map(p => p.id), 0) + 1;
+	    } catch (e) {
+	        console.error('帖子加载失败，使用默认数据', e);
+	        let stored = localStorage.getItem("globalPosts");
+	        if (stored) {
+	            globalPosts = JSON.parse(stored);
+	            nextPostId = Math.max(...globalPosts.map(p => p.id), 0) + 1;
+	        }
+	    }
+	}
+	function savePosts() {
+	    // 数据已经在服务器端，这里只做 localStorage 备份（可选）
+	    // localStorage.setItem("globalPosts", JSON.stringify(globalPosts));
+	}
+    initPosts();
+
+    function sortPosts(posts){
+        let now = Date.now();
+        let top = posts.filter(p=>p.isTop);
+        let recent = posts.filter(p=>!p.isTop && (now - (p.timestamp || 0) < 600000));
+        let other = posts.filter(p=>!p.isTop && !(now - (p.timestamp || 0) < 600000));
+        recent.sort((a,b)=> (b.timestamp||0) - (a.timestamp||0));
+        other.sort((a,b)=> b.viewCount - a.viewCount);
+        return [...top, ...recent, ...other];
+    }
+
+    // 实时在线系统
+    let sessionId = Math.random().toString(36);
+    function updateOnlineStatus() { let info = { sessionId, phone: currentUser?.phone || '游客'+sessionId.slice(0,4), nickname: userProfiles[currentUser?.phone]?.nickname || currentUser?.phone || '游客', avatar: userProfiles[currentUser?.phone]?.avatar || 'https://randomuser.me/api/portraits/lego/1.jpg', lastSeen: Date.now() }; let stored = JSON.parse(localStorage.getItem("onlineUsers") || "{}"); stored[sessionId] = info; localStorage.setItem("onlineUsers", JSON.stringify(stored)); }
+    function cleanOfflineUsers() { let stored = JSON.parse(localStorage.getItem("onlineUsers") || "{}"); let now = Date.now(); for(let id in stored){ if(now - stored[id].lastSeen > 10000) delete stored[id]; } localStorage.setItem("onlineUsers", JSON.stringify(stored)); }
+    setInterval(()=>{ if(document.visibilityState==="visible") updateOnlineStatus(); cleanOfflineUsers(); renderOnlineList(); }, 3000);
+    window.addEventListener("beforeunload", ()=>{ let stored = JSON.parse(localStorage.getItem("onlineUsers") || "{}"); delete stored[sessionId]; localStorage.setItem("onlineUsers", JSON.stringify(stored)); });
+	function renderOnlineList() {
+	    let stored = JSON.parse(localStorage.getItem("onlineUsers") || "{}");
+	    let count = Object.keys(stored).length;
+	    document.getElementById("onlineCount").innerText = count;
+	    let html = "";
+	    for (let id in stored) {
+	        let u = stored[id];
+	        const isMe = (currentUser && u.phone === currentUser.phone);
+	        let followBtn = '';
+	        let msgBtn = '';
+	        if (currentUser && !isMe) {
+	            const following = isFollowing(currentUser.phone, u.phone);
+	            followBtn = `<button class="btn-sm" data-follow="${u.phone}" style="font-size:0.65rem; padding:2px 8px;">${following ? '已关注' : '关注'}</button>`;
+	            msgBtn = `<button class="btn-sm" data-msg="${u.phone}" style="font-size:0.65rem; padding:2px 8px;">私信</button>`;
+	        }
+	        html += `<div class="online-user-item">
+	            <div class="user-info-inline" data-phone="${u.phone}">
+	                <img src="${u.avatar}" width="30" style="border-radius:50%;">
+	                <span><strong>${u.nickname}</strong></span>
+	            </div>
+	            <div class="user-actions">
+	                ${followBtn}
+	                ${msgBtn}
+	            </div>
+	        </div>`;
+	    }
+	    document.getElementById("onlineUserList").innerHTML = html || "暂无其他在线用户";
+	
+	    // 点击用户信息查看主页
+	    document.querySelectorAll('.online-user-item .user-info-inline').forEach(el => {
+	        el.addEventListener('click', (e) => {
+	            e.stopPropagation();
+	            let phone = el.closest('.online-user-item').querySelector('.user-info-inline').dataset.phone;
+	            if (phone && phone !== '游客' && phone !== currentUser?.phone) {
+	                viewUserProfile(phone);
+	            } else if (phone === currentUser?.phone) {
+	                document.getElementById("myProfileModal").style.display = "flex";
+	                renderMyProfile();
+	            } else {
+	                alert("游客无法查看主页，请登录");
+	            }
+	        });
+	    });
+	
+	    // 关注按钮事件
+	    document.querySelectorAll('[data-follow]').forEach(btn => {
+	        btn.addEventListener('click', (e) => {
+	            e.stopPropagation();
+	            if (!currentUser) { alert("请先登录"); return; }
+	            const targetPhone = btn.dataset.follow;
+	            toggleFollow(currentUser.phone, targetPhone);
+	            renderOnlineList(); // 刷新以更新按钮文字
+	        });
+	    });
+	
+	    // 私信按钮事件
+	    document.querySelectorAll('[data-msg]').forEach(btn => {
+	        btn.addEventListener('click', (e) => {
+	            e.stopPropagation();
+	            if (!currentUser) { alert("请先登录"); return; }
+	            const targetPhone = btn.dataset.msg;
+	            const msgContent = prompt(`发送私信给 ${userProfiles[targetPhone]?.nickname || targetPhone}：`);
+	            if (msgContent && msgContent.trim()) {
+	                sendPrivateMessage(currentUser.phone, targetPhone, msgContent.trim());
+	                alert("私信已发送！");
+	            }
+	        });
+	    });
+	}
+    
+    function recordAction(type, targetId, extra={}){ if(!currentUser) return; let key = currentUser.phone; if(!userActions[key]) userActions[key] = { views:[], posts:[], comments:[], likes:[], collections:[] }; if(type==='view') userActions[key].views.unshift({ postId:targetId, time:new Date().toISOString(), title:globalPosts.find(p=>p.id==targetId)?.title }); if(type==='like') userActions[key].likes.unshift({ postId:targetId, time:new Date().toISOString() }); if(type==='comment') userActions[key].comments.unshift({ postId:targetId, content:extra.content, time:new Date().toISOString() }); if(type==='publish') userActions[key].posts.unshift({ postId:targetId, time:new Date().toISOString() }); if(type==='collect') userActions[key].collections.unshift({ postId:targetId, time:new Date().toISOString() }); localStorage.setItem("userActions", JSON.stringify(userActions)); }
+    
+    function reportContent(type, id, reason) { if(!currentUser) { alert("请先登录"); return; } let reportData = JSON.parse(localStorage.getItem("reports") || "[]"); reportData.push({ reporter: currentUser.phone, type, targetId: id, reason, time: new Date().toISOString() }); localStorage.setItem("reports", JSON.stringify(reportData)); alert("举报已提交，管理员将尽快处理"); }
+    
+    // 帖子详情
+    function showPostDetail(postId) {
+        let post = globalPosts.find(p=>p.id==postId);
+        if(!post) return;
+        let isAuthor = currentUser && post.authorId === currentUser.phone;
+        let canDelete = currentUser && (post.authorId === currentUser.phone || currentUser.isAdmin);
+        let profile = userProfiles[post.authorId] || { nickname: post.author, avatar:"https://randomuser.me/api/portraits/lego/1.jpg", bio:"" };
+        let liked = currentUser && post.likedBy.includes(currentUser.phone);
+        let collected = currentUser && post.collectedBy.includes(currentUser.phone);
+        let html = `<div style="border-bottom:1px solid #0ff; padding-bottom:10px;"><div style="display:flex; gap:12px;"><img src="${profile.avatar}" class="avatar" style="width:50px; height:50px;"><div><h3>${profile.nickname}</h3><div class="bio-text">${profile.bio||''}</div></div></div><h2 style="margin-top:12px;">${post.title}</h2><div>${post.content}</div>${post.images?.length?`<img src="${post.images[0]}" style="max-width:100%; margin:10px 0;">`:''}${post.video?`<video controls src="${post.video}" style="max-width:100%;"></video>`:''}<div class="post-meta">📅 ${post.time}  👁️ ${post.viewCount}</div><div class="detail-stats"><span id="likeStat" data-id="${post.id}">❤️ ${post.likeCount} 点赞</span> <span id="collectStat" data-id="${post.id}">⭐ ${post.collectedBy.length} 收藏</span> <span id="shareStat" data-id="${post.id}">📤 ${post.sharedBy.length} 分享</span></div><div class="post-actions" style="margin-top:10px;">${!currentUser?'<span>请登录互动</span>':`<button class="btn-sm" id="detailLikeBtn">${liked?'取消点赞':'点赞'}</button> <button class="btn-sm" id="detailCollectBtn">${collected?'取消收藏':'收藏'}</button> <button class="btn-sm" id="detailShareBtn">分享</button>`} 
+        ${isAuthor ? `<button class="btn-sm" id="editPostBtn">编辑</button>` : ''}
+		${canDelete ? `<button class="btn-sm" id="deletePostBtn">删除</button>` : ''}
+        <span class="report-btn" data-type="post" data-id="${post.id}">举报帖子</span></div><div style="margin-top:15px;"><textarea id="commentText" rows="2" placeholder="写评论..."></textarea><div><label class="file-label">📷 评论图片</label><input type="file" id="commentImage" accept="image/*" style="display:none;"><div id="commentImagePreview"></div></div><button class="btn-sm" id="submitCommentBtn">发布评论</button></div><div id="commentsArea" style="margin-top:20px;"><h4>评论 (${post.comments.length})</h4><div id="commentsList"></div></div></div>`;
+        document.getElementById("postDetailContent").innerHTML = html;
+        document.getElementById("postDetailModal").style.display = "flex";updateParticleZIndex();
+        function renderComments() { 
+            let commentsHtml = '';
+            post.comments.forEach((c, idx) => {
+                let user = userProfiles[c.userId] || { nickname: c.userId || '匿名', avatar: 'https://randomuser.me/api/portraits/lego/1.jpg' };
+                commentsHtml += `<div style="margin-bottom:12px; border-bottom:1px solid #555; padding-bottom:6px;"><div><img src="${user.avatar}" width="24" style="border-radius:50%;"> <strong>${user.nickname}</strong> <span style="font-size:0.7rem;">${c.time || ''}</span> <span class="report-btn" data-type="comment" data-id="${post.id}_${idx}" style="font-size:0.6rem;">举报</span></div><div>${c.content}</div>${c.image?`<img src="${c.image}" style="max-width:80px;">`:''}<div><button class="btn-sm" data-reply-to="${idx}">回复</button></div><div id="replies-${idx}" style="margin-left:20px;">${(c.replies||[]).map(r=>`<div><img src="${userProfiles[r.userId]?.avatar||''}" width="20"> <strong>${userProfiles[r.userId]?.nickname||r.userId}</strong>: ${r.content} <span class="report-btn" data-type="reply" data-id="${post.id}_${idx}_${r.userId}" style="font-size:0.6rem;">举报</span></div>`).join('')}</div><div id="replyInput-${idx}" style="display:none; margin-top:5px;"><input type="text" id="replyText-${idx}" placeholder="回复..."><button class="btn-sm" data-reply-submit="${idx}">提交回复</button></div></div>`;
+            });
+            document.getElementById("commentsList").innerHTML = commentsHtml || "暂无评论";
+            document.querySelectorAll('[data-reply-to]').forEach(btn=>{ btn.onclick = (e)=>{ let idx = btn.dataset.replyTo; let div = document.getElementById(`replyInput-${idx}`); div.style.display = div.style.display === 'none' ? 'block' : 'none'; }; });
+            document.querySelectorAll('[data-reply-submit]').forEach(btn=>{ btn.onclick = (e)=>{ let idx = btn.dataset.replySubmit; let text = document.getElementById(`replyText-${idx}`).value.trim(); if(text && currentUser){ if(!post.comments[idx].replies) post.comments[idx].replies = []; post.comments[idx].replies.push({ userId: currentUser.phone, content: text, time: new Date().toLocaleString() }); post.commentCount = post.comments.reduce((a,c)=> a+1+(c.replies?.length||0),0); savePosts(); addNotification(post.authorId, `${userProfiles[currentUser.phone]?.nickname||currentUser.phone} 回复了你在帖子《${post.title}》中的评论: "${text}"`); showPostDetail(post.id); } else alert("请登录后回复"); }; });
+            document.querySelectorAll('.report-btn').forEach(btn=>{ btn.onclick = (e)=>{ let type = btn.dataset.type; let id = btn.dataset.id; let reason = prompt("请输入举报原因"); if(reason) reportContent(type, id, reason); }; });
+        }
+        renderComments();
+        document.getElementById("detailLikeBtn")?.addEventListener("click",()=>{ if(!currentUser) return alert("请登录"); if(post.likedBy.includes(currentUser.phone)){ post.likedBy = post.likedBy.filter(p=>p!==currentUser.phone); post.likeCount--; } else { post.likedBy.push(currentUser.phone); post.likeCount++; recordAction('like',post.id); addNotification(post.authorId, `${userProfiles[currentUser.phone]?.nickname||currentUser.phone} 点赞了你的帖子《${post.title}》`); } savePosts(); showPostDetail(post.id); });
+        document.getElementById("detailCollectBtn")?.addEventListener("click",()=>{ if(!currentUser) return alert("请登录"); if(post.collectedBy.includes(currentUser.phone)){ post.collectedBy = post.collectedBy.filter(p=>p!==currentUser.phone); } else { post.collectedBy.push(currentUser.phone); recordAction('collect',post.id); addNotification(post.authorId, `${userProfiles[currentUser.phone]?.nickname||currentUser.phone} 收藏了你的帖子《${post.title}》`); } savePosts(); showPostDetail(post.id); });
+        document.getElementById("detailShareBtn")?.addEventListener("click",()=>{ if(!currentUser) return alert("请登录"); if(!post.sharedBy.includes(currentUser.phone)){ post.sharedBy.push(currentUser.phone); savePosts(); addNotification(post.authorId, `${userProfiles[currentUser.phone]?.nickname||currentUser.phone} 分享了你的帖子《${post.title}》`); } alert("分享链接已复制(模拟)"); });
+        document.getElementById("submitCommentBtn")?.addEventListener("click",()=>{ if(!currentUser) return alert("请登录"); let text = document.getElementById("commentText").value.trim(); let file = document.getElementById("commentImage").files[0]; if(!text) return alert("请输入评论内容"); let finish = (base64)=>{ post.comments.push({ userId: currentUser.phone, content: text, image: base64, time: new Date().toLocaleString(), replies:[] }); post.commentCount = post.comments.reduce((a,c)=> a+1+(c.replies?.length||0),0); savePosts(); recordAction('comment',post.id,{content:text}); addNotification(post.authorId, `${userProfiles[currentUser.phone]?.nickname||currentUser.phone} 评论了你的帖子《${post.title}》: "${text}"`); showPostDetail(post.id); }; if(file){ let reader = new FileReader(); reader.onload = (e)=> finish(e.target.result); reader.readAsDataURL(file); } else finish(null); document.getElementById("commentText").value=""; });
+        document.getElementById("editPostBtn")?.addEventListener("click",()=>{ let newTitle = prompt("新标题",post.title); let newContent = prompt("新内容",post.content); if(newTitle) post.title=newTitle; if(newContent) post.content=newContent; savePosts(); showPostDetail(post.id); renderAll(); });
+		document.getElementById("deletePostBtn")?.addEventListener("click", async () => {
+		    if (!confirm("确定要删除这条帖子吗？此操作不可恢复！")) return;
+		
+		    try {
+		        // 调用后端删除 API
+		        const response = await fetch(`${API_BASE}/posts/${post.id}`, {
+		            method: 'DELETE'
+		        });
+		        const result = await response.json();
+		
+		        if (result.success) {
+		            alert("✅ 帖子已删除");
+		            // 关闭详情弹窗
+		            document.getElementById("postDetailModal").style.display = "none";
+		            // 重新加载帖子并刷新页面
+		            await initPosts();
+		            renderAll();
+		        } else {
+		            alert("删除失败：" + (result.msg || "未知错误"));
+		        }
+		    } catch (error) {
+		        console.error("删除帖子出错：", error);
+		        alert("删除失败，请检查网络或后端是否启动");
+		    }
+		});
+        document.getElementById("likeStat")?.addEventListener("click",()=>{ showUserList(post.likedBy, "点赞用户"); });
+        document.getElementById("collectStat")?.addEventListener("click",()=>{ showUserList(post.collectedBy, "收藏用户"); });
+        document.getElementById("shareStat")?.addEventListener("click",()=>{ showUserList(post.sharedBy, "分享用户"); });
+        setTimeout(addCloseButtonsToModals, 10);
+    }
+    function showUserList(userIds, title){ if(!userIds.length){ alert("暂无"); return; } let html = `<div class="user-list-popup"><strong>${title}</strong><br>`+userIds.map(uid=>{ let p=userProfiles[uid]||{nickname:uid}; return `<div>👤 ${p.nickname}</div>`; }).join('')+`</div>`; let modal = document.createElement("div"); modal.className="modal"; modal.style.display="flex"; modal.innerHTML=`<div class="cyber-modal" style="max-width:400px;">${html}<button class="cyber-btn" onclick="this.closest('.modal').remove()">关闭</button></div>`; document.body.appendChild(modal); setTimeout(addCloseButtonsToModals, 10); }
+    
+    // 吃瓜社区
+    function openCommunitySquare() {
+        let sorted = sortPosts(globalPosts);
+        let container = document.getElementById("communityPostsContainer");
+        container.innerHTML = `<div class="community-grid">${sorted.map(p=>{
+            let author = userProfiles[p.authorId] || { nickname: p.author, avatar: "https://randomuser.me/api/portraits/lego/1.jpg" };
+            return `<div class="community-post-card" data-id="${p.id}">
+                <div style="display:flex; gap:8px; align-items:center;"><img src="${author.avatar}" width="30" style="border-radius:50%;"><strong>${author.nickname}</strong> <span style="font-size:0.7rem;">${p.time}</span></div>
+                <div class="post-title" style="margin-top:8px;">${p.title}</div>
+                <div style="font-size:0.8rem; color:#ccc; margin-top:5px;">${p.content.substring(0,100)}${p.content.length>100?'...':''}</div>
+                <div style="margin-top:8px; display:flex; gap:15px; font-size:0.7rem;"><span>❤️ ${p.likeCount}</span><span>💬 ${p.commentCount}</span><span>👁️ ${p.viewCount}</span></div>
+            </div>`;
+        }).join('')}</div>`;
+        document.querySelectorAll('.community-post-card').forEach(card=>{
+            card.addEventListener('click', (e)=>{
+                let pid = parseInt(card.dataset.id);
+                if(pid) { document.getElementById("communityModal").style.display="none"; showPostDetail(pid);updateParticleZIndex(); }
+            });
+        });
+        document.getElementById("communityModal").style.display = "flex";updateParticleZIndex();
+        setTimeout(addCloseButtonsToModals, 10);
+        
+    }
+    
+    function renderMyProfile() { 
+        let profile = userProfiles[currentUser.phone] || { nickname:currentUser.phone, gender:"保密", bio:"", avatar:"https://randomuser.me/api/portraits/lego/1.jpg" }; 
+        document.getElementById("myAvatar").src = profile.avatar; 
+        document.getElementById("editNickname").value = profile.nickname; 
+        document.getElementById("editGender").value = profile.gender; 
+        document.getElementById("editBio").value = profile.bio || ""; 
+        document.getElementById("myUserIdDisplay").value = currentUser.userId || '未分配';
+        let actions = userActions[currentUser.phone] || { views:[], posts:[], likes:[], comments:[], collections:[] }; 
+        let tab = document.querySelector("#historyContent"); 
+        function showViews(){ let html = actions.views.map(v=>`<div class="record-item" data-postid="${v.postId}">📖 浏览了: ${v.title || '帖子'+v.postId} 于 ${new Date(v.time).toLocaleString()}</div>`).join('') || "暂无"; tab.innerHTML = html; document.querySelectorAll('[data-postid]').forEach(el=>{ el.onclick=()=>{ profileModal.style.display="none"; showPostDetail(parseInt(el.dataset.postid)); }; }); } 
+        function showPosts(){ let myPosts = globalPosts.filter(p=>p.authorId===currentUser.phone); let html = myPosts.map(p=>`<div class="record-item" data-postid="${p.id}">📝 发布: ${p.title} (👍${p.likeCount} 💬${p.commentCount})</div>`).join('') || "暂无"; tab.innerHTML = html; document.querySelectorAll('[data-postid]').forEach(el=>{ el.onclick=()=>{ profileModal.style.display="none"; showPostDetail(parseInt(el.dataset.postid)); }; }); } 
+        function showInteract(){ let likesHtml = actions.likes.map(l=>`<div class="record-item" data-postid="${l.postId}">❤️ 点赞了帖子 ${l.postId}</div>`).join(''); let commentsHtml = actions.comments.map(c=>`<div class="record-item" data-postid="${c.postId}">💬 评论了帖子 ${c.postId}: "${c.content}"</div>`).join(''); tab.innerHTML = likesHtml+commentsHtml || "暂无互动"; document.querySelectorAll('[data-postid]').forEach(el=>{ el.onclick=()=>{ profileModal.style.display="none"; showPostDetail(parseInt(el.dataset.postid)); }; }); } 
+        function showCollections(){ let cols = actions.collections.map(c=>`<div class="record-item" data-postid="${c.postId}">⭐ 收藏了帖子 ${c.postId}</div>`).join('') || "暂无"; tab.innerHTML = cols; document.querySelectorAll('[data-postid]').forEach(el=>{ el.onclick=()=>{ profileModal.style.display="none"; showPostDetail(parseInt(el.dataset.postid)); }; }); } 
+        function showNotifications(){ let notifs = userNotifications[currentUser.phone] || []; let html = notifs.map(n=>`<div class="record-item ${n.read?'':'unread'}">📬 ${n.msg}<br><small>${n.timestamp}</small></div>`).join('') || "暂无"; tab.innerHTML = html; } 
+        document.getElementById("tabViewHistory").onclick = ()=>{ showViews(); setActiveTab("tabViewHistory"); }; 
+        document.getElementById("tabPostHistory").onclick = ()=>{ showPosts(); setActiveTab("tabPostHistory"); }; 
+        document.getElementById("tabInteractHistory").onclick = ()=>{ showInteract(); setActiveTab("tabInteractHistory"); }; 
+        document.getElementById("tabCollectionHistory").onclick = ()=>{ showCollections(); setActiveTab("tabCollectionHistory"); }; 
+        document.getElementById("tabNotifications").onclick = ()=>{ showNotifications(); setActiveTab("tabNotifications"); }; 
+        showViews(); 
+        setTimeout(addCloseButtonsToModals, 10);
+		function updateParticleZIndex() {
+		    const canvas = document.getElementById("globalParticlesCanvas");
+		    if (!canvas) return;
+		    // 检查是否有任何 modal 处于显示状态（display 为 flex）
+		    const modals = document.querySelectorAll('.modal');
+		    let anyVisible = false;
+		    modals.forEach(m => {
+		        if (m.style.display === 'flex') anyVisible = true;
+		    });
+		    canvas.style.zIndex = anyVisible ? '2001' : '1';
+		}
+		
+    }
+    function setActiveTab(activeId){ document.querySelectorAll(".my-tab span").forEach(t=>t.classList.remove("active")); document.getElementById(activeId).classList.add("active"); }
+    
+    function renderGuaCard() { 
+        let sorted = sortPosts(globalPosts);
+        let html = `<div class="card" id="guaCommunityCard"><div class="card-header" id="communityCardHeader"><i class="fas fa-newspaper"></i><h2>🍉 吃瓜社区 · 热门榜</h2><i class="fas fa-arrow-right"></i></div><div class="card-body" id="guaBody">`; 
+        if(currentUser) html += `<div class="admin-toolbar"><button class="btn-sm" id="newPostBtn">📝 发布新瓜</button></div>`; 
+        sorted.slice(0,5).forEach(p=>{ 
+            let authorProfile = userProfiles[p.authorId] || { nickname: p.author, avatar: "https://randomuser.me/api/portraits/lego/1.jpg" };
+            html += `<div class="post-card" data-id="${p.id}"><div class="post-title"><span>${p.isTop ? '🔝 ' : ''}${p.title}</span><span>👁️ ${p.viewCount}</span></div>
+            <div class="post-meta"><img src="${authorProfile.avatar}" width="20" style="border-radius:50%;"> <span class="author-name" data-author="${p.authorId}">${authorProfile.nickname}</span> | ${p.time}</div>
+            <div>${p.content.substring(0,80)}</div>${p.images?.length?`<img src="${p.images[0]}" style="max-width:100px;">`:''}${p.video?`<video src="${p.video}" controls width="100"></video>`:''}
+            <div class="post-actions"><i class="far fa-thumbs-up like-btn" data-id="${p.id}"> ${p.likeCount}</i><i class="far fa-comment" data-id="${p.id}" data-toggle="comment"> 💬 ${p.commentCount}</i><i class="fas fa-eye" data-id="${p.id}" data-view> 详情</i>
+            ${(currentUser && (currentUser.isAdmin || p.authorId === currentUser.phone)) ? `<i class="fas fa-thumbtack" data-top="${p.id}"></i><i class="fas fa-trash-alt" data-del="${p.id}"></i>` : ''}
+            </div>
+            <div class="comment-section" id="comments-${p.id}" style="display:none;"><textarea id="commentText-${p.id}" placeholder="写评论..."></textarea><button class="btn-sm" data-comment="${p.id}">评论</button><div id="commentList-${p.id}"></div></div></div>`; 
+        }); 
+        html+=`</div><div class="card-footer"><span style="cursor:pointer;" id="viewAllPostsBtn">查看全部帖子 →</span></div></div>`; 
+        return html; 
+    }
+    
+    function renderOthers() { 
+        return `<div class="grid"><div class="card"><div class="card-header"><i class="fas fa-utensils"></i><h2>🍱 校园外卖服务</h2></div><div class="card-body" id="takeawayBody"></div><div class="card-footer"><input type="text" id="takeawaySearch" placeholder="搜索美食"><button class="btn-sm" id="searchTakeawayBtn">搜索</button></div></div><div class="card"><div class="card-header"><i class="fas fa-box"></i><h2>📦 快递代取服务</h2></div><div class="card-body" id="expressBody"></div><div class="card-footer"><div style="display:flex; flex-wrap:wrap; gap:8px;"><input type="text" id="expressNum" placeholder="快递单号" style="flex:1; min-width:100px;"><input type="text" id="expressAddress" placeholder="送达地址(楼栋-房间)" style="flex:1; min-width:100px;"><input type="text" id="expressTime" placeholder="期望时间" style="flex:1; min-width:100px;"><input type="text" id="expressReceiver" placeholder="收货人" style="flex:1; min-width:100px;"><input type="text" id="expressReceiverPhone" placeholder="收货人电话" style="flex:1; min-width:100px;"><select id="expressReward" style="min-width:80px;"><option>2元</option><option>3元</option><option>5元</option></select><button class="btn-sm" id="publishExpressBtn">发布代取</button></div></div></div></div><div class="grid"><div class="card"><div class="card-header"><i class="fas fa-exchange-alt"></i><h2>📦 二手交易市场</h2></div><div class="card-body" id="secondhandBody"></div><div class="card-footer"><div class="secondhand-publish"><input type="text" id="newSecondhandName" placeholder="物品名称"><input type="text" id="newSecondhandPrice" placeholder="价格"><input type="text" id="newSecondhandDesc" placeholder="描述"><button class="btn-sm" id="pickMediaBtn">📎 上传图片/视频</button><button class="btn-sm" id="publishSecondhandBtn">发布闲置</button></div></div></div><div class="card"><div class="card-header"><i class="fas fa-users"></i><h2>🎉 社团活动</h2></div><div class="card-body" id="activityBody"></div></div></div><div class="grid"><div class="card"><div class="card-header"><i class="fas fa-calendar-check"></i><h2>📅 场馆预约</h2></div><div class="card-body" id="reserveBody"></div></div><div class="card"><div class="card-header"><i class="fas fa-tools"></i><h2>🔧 宿舍报修</h2></div><div class="card-body" id="repairBody"></div><div class="card-footer"><textarea id="repairDesc" rows="2" placeholder="描述问题..."></textarea><button class="btn-sm" id="submitRepairBtn">提交</button></div></div></div>`; 
+    }
+    function renderTimetableCard() { let data = schoolData[currentSchool]; let days = ["周一","周二","周三","周四","周五"]; let times = ["08:00-09:35","09:50-12:15","14:00-15:35","15:50-17:25"]; let key = `timetable_${currentUser?.phone||'guest'}_${currentSchool}`; let custom = customTimetables[key]; let timetable = custom ? custom : data.timetable; let html = `<div class="card"><div class="card-header"><i class="fas fa-calendar-alt"></i><h2>📖 课表</h2></div><div class="card-body"><table class="timetable"><thead><tr><th>时间</th>${days.map(d=>`<th>${d}</th>`).join('')}</td></thead><tbody>`; for(let i=0;i<times.length;i++){ html += `<tr><td>${times[i]}</td>`; for(let j=0;j<days.length;j++){ let dayKey=["mon","tue","wed","thu","fri"][j]; let course = timetable[dayKey]?.[i] || ["",""]; html += `<td class="editable-cell" data-day="${dayKey}" data-index="${i}">${course[0]}<br><span style="font-size:10px;">${course[1]}</span></td>`; } html+=`</tr>`; } html+=`</tbody></table></div><div class="card-footer"><button class="btn-sm" id="resetTimetable">恢复默认</button></div></div>`; return html; }
+    async function renderAll(){await loadSecondhandData();await loadExpressData();  let container = document.getElementById("dynamicContent"); container.innerHTML = `<div class="grid">${renderGuaCard()}</div><div class="grid">${renderTimetableCard()}</div>${renderOthers()}`; let data = schoolData[currentSchool]; 
+		const activityBody = document.getElementById("activityBody");
+		if (activityBody) {
+		    activityBody.innerHTML = data.activities.map(a => {
+		        const canRegister = a.current < a.capacity;
+		        return `<div class="list-item">
+		            <div>
+		                <strong>${a.name}</strong><br>
+		                ${a.date} <br> 📍${a.location}
+		            </div>
+		            <div>
+		                <span class="tag">${a.current}/${a.capacity}</span>
+		                ${canRegister ? `<button class="btn-sm register-activity-btn" data-name="${a.name}">报名</button>` : '<span class="tag" style="background:#ccc;">已满</span>'}
+		            </div>
+		        </div>`;
+		    }).join('');
+		} 
+		const secondhandBody = document.getElementById("secondhandBody");
+		if (secondhandBody) {
+		    secondhandBody.innerHTML = data.secondhand.map(g => {
+		        const isOwner = currentUser && (g.publisherPhone === currentUser.phone || currentUser.isAdmin);
+		        return `<div class="list-item">
+		            <div>
+		                ${g.name}<br>${g.desc}
+		                ${g.media ? `<img src="${g.media}" style="max-width:60px;border-radius:8px;">` : ''}
+		            </div>
+		            <div>
+		                <span class="tag">${g.price}</span>
+		                <button class="btn-sm contact-seller-btn" data-phone="${g.publisherPhone || ''}" data-seller="${g.seller}">私聊</button>
+		                ${isOwner ? `<button class="btn-sm delete-secondhand-btn" data-name="${g.name}" style="background:#ff5555;margin-left:4px;">删除</button>` : ''}
+		            </div>
+		        </div>`;
+		    }).join('');
+		}
+		const reserveBody = document.getElementById("reserveBody");
+		if (reserveBody) {
+		    reserveBody.innerHTML = data.reservations.map(r => {
+		        const available = r.maxCapacity - r.bookedCount;
+		        return `<div class="list-item">
+		            <div>
+		                <strong>${r.name}</strong><br>
+		                ⏰ ${r.timeSlot} | 容纳：${r.maxCapacity}人 | 已约：${r.bookedCount}人
+		            </div>
+		            <div>
+		                <span class="tag">${available > 0 ? '可预约' : '已满'}</span>
+		                ${available > 0 ? `<button class="btn-sm reserve-venue-btn" data-name="${r.name}">预约</button>` : ''}
+		            </div>
+		        </div>`;
+		    }).join('');
+		}
+        // 外卖恢复原数据
+        // 外卖卡片渲染（带图片、月销，滚动显示全部）
+		const takeawayBody = document.getElementById("takeawayBody");
+		if (takeawayBody) {
+		    takeawayBody.innerHTML = data.takeaway.map(f => `
+		        <div class="list-item takeaway-item" data-name="${f.name}" style="align-items:flex-start;gap:12px;">
+		            <img src="${f.image}" alt="${f.name}" style="width:80px;height:80px;object-fit:cover;border-radius:12px;flex-shrink:0;">
+		            <div style="flex:1;">
+		                <div style="display:flex;justify-content:space-between;">
+		                    <strong>${f.name}</strong>
+		                    <span style="color:#e53e3e;font-weight:bold;">${f.price}</span>
+		                </div>
+		                <div style="font-size:0.7rem;color:#718096;margin:4px 0;">${f.shop} · 约${f.delivery} · ⭐${f.rating}</div>
+		                <div style="font-size:0.7rem;color:#a0aec0;">月销 ${f.monthSales}+</div>
+		                <button class="btn-sm order-food-btn" data-name="${f.name}" style="margin-top:5px;background:#f59e0b;color:white;">下单</button>
+		            </div>
+		        </div>
+		    `).join('');
+		}
+        // 快递增强
+        const expressBody = document.getElementById("expressBody");
+		if (expressBody) {
+		    // 合并自定义快递和学校原始快递，并过滤掉已接单订单（自动删除）
+		    let allExpress = (customExpress[currentSchool] || [])
+		        .concat(data.express)
+		        .filter(e => e.status !== '已接单'); // 👈 已接单不再显示
+		
+			expressBody.innerHTML = allExpress.map(e => {
+			    const isOwner = currentUser && (e.publisherPhone === currentUser.phone || currentUser.isAdmin);
+			    let actionHtml = '';
+			    if (e.status === '待取') {
+			        actionHtml += `<button class="btn-sm take-express-btn" data-id="${e.id}">接单</button>`;
+			    }
+			    if (isOwner) {
+			        actionHtml += `<button class="btn-sm delete-express-btn" data-id="${e.id}" style="background:#ff5555;margin-left:4px;">删除</button>`;
+			    }
+			    return `<div class="list-item">
+			        <div>
+			            <strong>📦 ${e.num}</strong><br>
+			            📍 ${e.address || '无'} &nbsp; 🕒 ${e.receiveTime || '不限'}<br>
+			            👤 收货人：${e.receiverName || '未知'}
+			        </div>
+			        <div>
+			            <span class="tag">${e.reward}</span>
+			            ${actionHtml}
+			        </div>
+			    </div>`;
+			}).join('') || '<div style="padding:20px;">暂无代取订单</div>';
+		}
+        document.getElementById("repairBody")&&(document.getElementById("repairBody").innerHTML=repairs.map(r=>`<div class="list-item"><div>${r.desc}<br>${r.date}</div><div><span class="tag">${r.status}</span></div></div>`).join(''));
+        attachDynamicEvents(data);
+        // ---- 场馆预约 ----
+		const reserveModal = document.getElementById("reserveModal");
+		const closeReserveModal = document.getElementById("closeReserveModal");
+		closeReserveModal.addEventListener("click", () => {
+		    reserveModal.style.display = "none";
+		    if (typeof updateParticleZIndex === 'function') updateParticleZIndex();
+		});
+		document.getElementById("reserveBody")?.addEventListener("click", function(e) {
+		    if (e.target.classList.contains("reserve-venue-btn")) {
+		        e.stopPropagation();
+		        const venueName = e.target.dataset.name;
+		        document.getElementById("reserveVenueName").innerText = venueName;
+		        // 清空表单
+		        document.getElementById("reservePerson").value = currentUser ? (userProfiles[currentUser.phone]?.nickname || '') : '';
+		        document.getElementById("reserveStudentId").value = '';
+		        document.getElementById("reserveDate").value = '';
+		        document.getElementById("reserveStartTime").value = '';
+		        document.getElementById("reserveDuration").value = '1';
+		        document.getElementById("reservePersons").value = 1;
+		        reserveModal.style.display = "flex";updateParticleZIndex();
+		        if (typeof updateParticleZIndex === 'function') updateParticleZIndex();
+		    }
+		});
+		document.getElementById("submitReserveBtn").addEventListener("click", () => {
+		    const person = document.getElementById("reservePerson").value.trim();
+		    const sid = document.getElementById("reserveStudentId").value.trim();
+		    const date = document.getElementById("reserveDate").value;
+		    const start = document.getElementById("reserveStartTime").value;
+		    const duration = document.getElementById("reserveDuration").value;
+		    const persons = parseInt(document.getElementById("reservePersons").value) || 1;
+		    if (!person || !sid || !date || !start) {
+		        alert("请填写所有必填信息");
+		        return;
+		    }
+		    const venueName = document.getElementById("reserveVenueName").innerText;
+		    const venue = schoolData[currentSchool].reservations.find(r => r.name === venueName);
+		    if (!venue) return;
+		    if (venue.bookedCount + persons > venue.maxCapacity) {
+		        alert(`预约人数超过剩余容量（剩余 ${venue.maxCapacity - venue.bookedCount} 人）`);
+		        return;
+		    }
+		    venue.bookedCount += persons;
+		    // 同步 schoolDataRaw
+		    const rawVenue = schoolDataRaw[currentSchool].reservations.find(r => r.name === venueName);
+		    if (rawVenue) rawVenue.bookedCount = venue.bookedCount;
+		    alert(`✅ 预约成功！\n场馆：${venueName}\n时间：${date} ${start} 起，共${duration}小时\n人数：${persons}\n预约人：${person} (${sid})`);
+		    reserveModal.style.display = "none";
+		    renderAll();
+		});
+        // ---- 社团活动报名 ----
+		document.getElementById("activityBody")?.addEventListener("click", function(e) {
+		    if (e.target.classList.contains("register-activity-btn")) {
+		        e.stopPropagation();
+		        const name = e.target.dataset.name;
+		        const act = schoolData[currentSchool].activities.find(a => a.name === name);
+		        if (act && act.current < act.capacity) {
+		            act.current++;
+		            // 同步更新 schoolDataRaw，防止刷新重置（可选）
+		            const rawAct = schoolDataRaw[currentSchool].activities.find(a => a.name === name);
+		            if (rawAct) rawAct.current = act.current;
+		            alert("✅ 您已报名成功，请及时参与！谢谢配合！");
+		            renderAll(); // 刷新显示
+		        } else {
+		            alert("名额已满，无法报名。");
+		        }
+		    }
+		});
+        attachGuaEvents(); attachTimetableEdit(); attachPostCardClick();
+        // ---- 二手交易事件委托（修正版） ----
+		document.getElementById("secondhandBody")?.addEventListener("click", function(e) {
+		    if (e.target.classList.contains("contact-seller-btn")) {
+		        e.stopPropagation();
+		        const phone = e.target.dataset.phone;
+		        const seller = e.target.dataset.seller;
+		        if (!contactBtnClicked) {
+		            if (!confirm("⚠️ 网络交易需谨慎！\n不轻信陌生人，谨防诈骗！！！\n确认后显示联系方式。")) return;
+		            contactBtnClicked = true;
+		        }
+		        let contactInfo = phone ? `📞 ${phone}` : `卖家：${seller}`;
+		        alert(`联系方式\n${contactInfo}`);
+		    }
+		    if (e.target.classList.contains("delete-secondhand-btn")) {
+		        e.stopPropagation();
+		        if (!confirm("确定删除该闲置物品吗？")) return;
+		        const name = e.target.dataset.name;
+		        // 从当前学校二手数组中移除
+		        const school = currentSchool;
+		        schoolData[school].secondhand = schoolData[school].secondhand.filter(
+		            item => !(item.name === name && (item.publisherPhone === currentUser.phone || item.seller === (userProfiles[currentUser.phone]?.nickname || currentUser.phone)))
+		        );
+		        saveCustomSecondhand(); // 保存到localStorage
+		        renderAll();
+		    }
+		});
+        document.getElementById("communityCardHeader")?.addEventListener("click", openCommunitySquare); 
+        document.getElementById("viewAllPostsBtn")?.addEventListener("click", openCommunitySquare); 
+    }
+    
+    function attachPostCardClick(){ document.querySelectorAll('.post-card').forEach(card=>{ card.addEventListener('click', (e)=>{ if(e.target.closest('.post-actions') || e.target.closest('.author-name')) return; let pid = parseInt(card.dataset.id); if(pid) showPostDetail(pid); }); }); }
+    function attachGuaEvents(){ 
+        document.querySelectorAll('.like-btn').forEach(btn=>{ btn.onclick=(e)=>{ e.stopPropagation(); let id=parseInt(btn.dataset.id); let p=globalPosts.find(p=>p.id==id); if(p){ if(currentUser){ if(p.likedBy.includes(currentUser.phone)){ p.likedBy=p.likedBy.filter(u=>u!==currentUser.phone); p.likeCount--; } else { p.likedBy.push(currentUser.phone); p.likeCount++; recordAction('like',id); addNotification(p.authorId, `${userProfiles[currentUser.phone]?.nickname||currentUser.phone} 点赞了你的帖子《${p.title}》`); } savePosts(); renderAll(); } else alert("请登录"); } }; }); 
+        document.querySelectorAll('[data-comment]').forEach(btn=>{ btn.onclick=(e)=>{ e.stopPropagation(); let pid=parseInt(btn.dataset.comment); let txt=document.getElementById(`commentText-${pid}`).value; if(txt && currentUser){ let p=globalPosts.find(p=>p.id==pid); if(p){ p.comments.push({ userId:currentUser.phone, content:txt, time:new Date().toLocaleString(), replies:[] }); p.commentCount = p.comments.reduce((a,c)=> a+1+(c.replies?.length||0),0); savePosts(); recordAction('comment',pid,{content:txt}); addNotification(p.authorId, `${userProfiles[currentUser.phone]?.nickname||currentUser.phone} 评论了你的帖子《${p.title}》: "${txt}"`); renderAll(); } } else alert("请登录后评论"); }; }); 
+        document.querySelectorAll('[data-view]').forEach(icon=>{ icon.onclick=(e)=>{ e.stopPropagation(); let id=parseInt(icon.closest('.post-card').dataset.id); let p=globalPosts.find(p=>p.id==id); if(p){ p.viewCount++; savePosts(); if(currentUser) recordAction('view',id); renderAll(); } }; }); 
+        document.querySelectorAll('[data-del]').forEach(btn=>{
+        	btn.onclick=(e)=>{ e.stopPropagation(); let id=parseInt(btn.dataset.del);
+        	if(confirm("确定删除?")){ globalPosts=globalPosts.filter(p=>p.id!=id);savePosts();renderAll();}
+        	};
+        });
+        document.querySelectorAll('[data-top]').forEach(btn=>{ btn.onclick=(e)=>{ e.stopPropagation(); let id=parseInt(btn.dataset.top); let p=globalPosts.find(p=>p.id==id); if(p){ p.isTop=!p.isTop; savePosts(); renderAll(); } }; }); 
+        document.querySelectorAll('.author-name').forEach(el=>{ el.onclick=(e)=>{ e.stopPropagation(); let authorId = el.dataset.author; if(authorId === currentUser?.phone) { document.getElementById("myProfileModal").style.display="flex";updateParticleZIndex(); renderMyProfile(); } else if(authorId && authorId !== 'guest') viewUserProfile(authorId); else alert("无法查看游客主页"); }; });
+        document.getElementById("newPostBtn")?.addEventListener("click",openNewPostModal); 
+    }
+    function attachTimetableEdit(){ document.querySelectorAll('.editable-cell').forEach(cell=>{ cell.onclick=()=>{ if(!currentUser){ alert("请先登录"); return; } let day=cell.dataset.day, idx=cell.dataset.index; let old=cell.innerText.split('\n')[0]; let newName=prompt("课程名",old); let newLoc=prompt("地点",cell.innerText.split('\n')[1]?.replace(/<.*?>/g,'').trim()||""); if(newName!==null){ let key = `timetable_${currentUser.phone}_${currentSchool}`; let custom = customTimetables[key] ? JSON.parse(JSON.stringify(customTimetables[key])) : JSON.parse(JSON.stringify(schoolData[currentSchool].timetable)); custom[day][idx] = [newName||"", newLoc||""]; customTimetables[key]=custom; localStorage.setItem("customTimetables",JSON.stringify(customTimetables)); renderAll(); } }; }); document.getElementById("resetTimetable")?.addEventListener("click",()=>{ let key=`timetable_${currentUser?.phone||'guest'}_${currentSchool}`; delete customTimetables[key]; localStorage.setItem("customTimetables",JSON.stringify(customTimetables)); renderAll(); }); }
+    function attachDynamicEvents(data){ 
+		document.getElementById("publishExpressBtn")?.addEventListener("click", async () => {
+
+		    if (!currentUser) { alert("请先登录"); return; }
+		    let num = document.getElementById("expressNum").value.trim();
+		    let address = document.getElementById("expressAddress").value.trim();
+		    let time = document.getElementById("expressTime").value.trim();
+		    let receiver = document.getElementById("expressReceiver").value.trim();
+		    let receiverPhone = document.getElementById("expressReceiverPhone").value.trim();
+		    let reward = document.getElementById("expressReward").value;
+		
+		    if (!num || !address || !receiver || !receiverPhone) {
+		        alert("请填写完整的快递信息（单号、地址、收货人、电话必填）");
+		        return;
+		    }
+		
+		    // 调用后端 API 发布代取
+		    const response = await fetch(`${API_BASE}/express`, {
+		        method: 'POST',
+		        headers: { 'Content-Type': 'application/json' },
+		        body: JSON.stringify({
+		            school: currentSchool,
+		            num,
+		            address,
+		            receive_time: time,
+		            receiver_name: receiver,
+		            receiver_phone: receiverPhone,
+		            reward,
+		            publisher_phone: currentUser.phone
+		        })
+		    });
+		    const result = await response.json();
+		    if (result.success) {
+		        alert("代取订单已发布");
+		        // 清空表单
+		        document.getElementById("expressNum").value = '';
+		        document.getElementById("expressAddress").value = '';
+		        document.getElementById("expressTime").value = '';
+		        document.getElementById("expressReceiver").value = '';
+		        document.getElementById("expressReceiverPhone").value = '';
+		        // 重新加载快递并刷新界面
+		        await loadExpressData();
+		        renderAll();
+		    } else {
+		        alert("发布失败，请重试");
+		    }
+		});
+        document.getElementById("searchTakeawayBtn")?.addEventListener("click",()=>{ let kw=document.getElementById("takeawaySearch").value.toLowerCase(); let filtered=data.takeaway.filter(f=>f.name.includes(kw)||f.shop.includes(kw)); let tb=document.getElementById("takeawayBody"); if(tb) tb.innerHTML=filtered.map(f=>`<div>${f.name} - ${f.shop}</div>`).join('')||"无结果"; }); 
+        document.getElementById("submitRepairBtn")?.addEventListener("click",()=>{ let d=document.getElementById("repairDesc").value; if(d){ repairs.unshift({desc:d,status:"处理中",date:new Date().toLocaleDateString()}); renderAll(); alert("报修已提交"); } });
+        let secondhandMedia = null;
+        document.getElementById("pickMediaBtn")?.addEventListener("click",()=>{ let input=document.createElement("input"); input.type="file"; input.accept="image/*,video/*"; input.onchange=(e)=>{ let file=e.target.files[0]; if(file){ let reader=new FileReader(); reader.onload=(ev)=>{ secondhandMedia=ev.target.result; alert("媒体已添加"); }; reader.readAsDataURL(file); } }; input.click(); });
+		document.getElementById("publishSecondhandBtn").onclick = async () => {
+		    if (!currentUser) { alert("请先登录"); return; }
+		    if (!secondhandMedia) { alert("请上传图片或视频"); return; }
+		    let name = document.getElementById("newSecondhandName").value.trim();
+		    let price = document.getElementById("newSecondhandPrice").value.trim();
+		    let desc = document.getElementById("newSecondhandDesc").value.trim();
+		    if (!name || !price) { alert("物品名称和价格不能为空"); return; }
+		
+		    const response = await fetch(`${API_BASE}/secondhand`, {
+		        method: 'POST',
+		        headers: { 'Content-Type': 'application/json' },
+		        body: JSON.stringify({
+		            school: currentSchool,
+		            name,
+		            price,
+		            seller_nickname: userProfiles[currentUser.phone]?.nickname || currentUser.phone,
+		            desc: desc || "无描述",
+		            media: secondhandMedia,
+		            publisher_phone: currentUser.phone
+		        })
+		    });
+		    const data = await response.json();
+		    if (data.success) {
+		        // 重新渲染二手列表（从服务器加载）
+		        loadSecondhandData(); // 需要新建一个加载函数，见下面
+		        document.getElementById("newSecondhandName").value = "";
+		        document.getElementById("newSecondhandPrice").value = "";
+		        document.getElementById("newSecondhandDesc").value = "";
+		        secondhandMedia = null;
+		        alert("发布成功");
+		    } else {
+		        alert("发布失败");
+		    }
+		};
+		// 接单事件委托
+        document.getElementById("expressBody")?.addEventListener("click", async function(e) {
+			if (e.target.classList.contains("take-express-btn")) {
+			    e.stopPropagation();
+			    if (!currentUser) { alert("请先登录"); return; }
+			
+			    // 获取订单 ID（来自后端，储存在按钮的 data-id 属性中，我们需要在渲染时加上）
+			    let orderId = e.target.dataset.id;
+			    if (!orderId) {
+			        alert("订单信息缺失，请刷新页面");
+			        return;
+			    }
+			
+			    // 查找对应订单以显示确认信息（可以从 customExpress 中找到）
+			    let order = customExpress[currentSchool]?.find(o => o.id == orderId);
+			    if (!order) {
+			        alert("订单已不存在");
+			        return;
+			    }
+			
+			    if (!confirm(`确认接单？\n单号：${order.num}\n悬赏：${order.reward}\n送达：${order.address}`)) return;
+			
+			    // （可选）实名认证逻辑可保留，但这里简化，如需保留则在此处添加
+			    // 调用后端接单
+			    const response = await fetch(`${API_BASE}/express/${orderId}/take`, {
+			        method: 'PUT',
+			        headers: { 'Content-Type': 'application/json' },
+			        body: JSON.stringify({ taker_phone: currentUser.phone })
+			    });
+			    const result = await response.json();
+			    if (result.success) {
+			        alert(`✅ 接单成功！\n收货人：${order.receiverName}\n电话：${order.receiverPhone}\n地址：${order.address}`);
+			        // 刷新快递列表
+			        await loadExpressData();
+			        renderAll();
+			    } else {
+			        alert("接单失败，可能已被其他人接走");
+			        await loadExpressData();
+			        renderAll();
+			    }
+			}
+			            // 删除订单
+			if (e.target.classList.contains("delete-express-btn")) {
+			    e.stopPropagation();
+			    if (!confirm("确定删除该订单吗？")) return;
+			    let orderId = e.target.dataset.id;
+			    if (!orderId) return;
+			
+			    const response = await fetch(`${API_BASE}/express/${orderId}`, {
+			        method: 'DELETE'
+			    });
+			    if (response.ok) {
+			        await loadExpressData();
+			        renderAll();
+			    } else {
+			        alert("删除失败");
+			    }
+			}
+        });
+		        // ---- 外卖下单弹窗交互 ----
+		const orderModal = document.getElementById("orderModal");
+		const closeOrderModal = document.getElementById("closeOrderModal");
+		const orderFoodName = document.getElementById("orderFoodName");
+		const orderTimeOption = document.getElementById("orderTimeOption");
+		const orderBookTime = document.getElementById("orderBookTime");
+		
+		// 点击“下单”按钮 (使用事件委托监听动态生成的按钮)
+		document.getElementById("takeawayBody")?.addEventListener("click", function(e) {
+		    if (e.target.classList.contains("order-food-btn")) {
+		        e.stopPropagation();
+		        const foodName = e.target.dataset.name;
+		        orderFoodName.innerText = `🍽️ ${foodName}`;
+		        orderModal.style.display = "flex";updateParticleZIndex();
+		        document.getElementById("orderReceiver").value = currentUser ? (userProfiles[currentUser.phone]?.nickname || '') : '';
+		        document.getElementById("orderAddress").value = '';
+		        document.getElementById("orderBookTime").value = '';
+		        document.getElementById("orderBookTime").style.display = 'none';
+		        orderTimeOption.value = 'now';
+		        document.getElementById("orderRemark").value = '';
+		        document.getElementById("orderNeedCutlery").checked = true;
+		        if (typeof updateParticleZIndex === 'function') updateParticleZIndex();
+		    }
+		});
+		
+		// 配送时间切换
+		orderTimeOption.addEventListener('change', function() {
+		    if (this.value === 'book') {
+		        orderBookTime.style.display = 'block';
+		    } else {
+		        orderBookTime.style.display = 'none';
+		    }
+		});
+		
+		// 关闭弹窗
+		closeOrderModal.addEventListener('click', () => {
+			
+		    orderModal.style.display = "none";
+		    if (typeof updateParticleZIndex === 'function') updateParticleZIndex();
+		});
+		
+		// 提交订单
+		document.getElementById("submitOrderBtn").addEventListener('click', function() {
+		    const receiver = document.getElementById("orderReceiver").value.trim();
+		    const address = document.getElementById("orderAddress").value.trim();
+		    const timeOption = orderTimeOption.value;
+		    const bookTime = document.getElementById("orderBookTime").value;
+		    const remark = document.getElementById("orderRemark").value.trim();
+		    const needCutlery = document.getElementById("orderNeedCutlery").checked;
+		
+		    if (!receiver || !address) {
+		        alert("请填写收货人和地址");
+		        return;
+		    }
+		    let deliveryTime = timeOption === 'now' ? '立即配送' : `预约 ${bookTime}`;
+		    if (timeOption === 'book' && !bookTime) {
+		        alert("请选择预约时间");
+		        return;
+		    }
+		
+		    alert(`✅ 下单成功！\n餐品：${orderFoodName.innerText}\n收货人：${receiver}\n地址：${address}\n时间：${deliveryTime}\n餐具：${needCutlery ? '需要' : '不需要'}\n备注：${remark || '无'}`);
+		    orderModal.style.display = "none";
+		    if (typeof updateParticleZIndex === 'function') updateParticleZIndex();
+		});
+    }
+    
+    function viewUserProfile(phone) { if(!currentUser){ alert("请先登录"); return; } let profile = userProfiles[phone] || { nickname: phone, gender:"保密", bio:"这个人很懒", avatar:"https://randomuser.me/api/portraits/lego/1.jpg" }; let actions = userActions[phone] || { views:[], posts:[], likes:[], comments:[] }; let myPosts = globalPosts.filter(p=>p.authorId === phone); let html = `<div style="text-align:center;"><img src="${profile.avatar}" class="avatar" style="width:80px; height:80px;"><h3>${profile.nickname}</h3><div class="bio-text">✍️ ${profile.bio || "这个人很懒，没有个性签名"}</div><div style="margin:15px 0;"><span class="tag">性别: ${profile.gender}</span> <span class="tag">ID: ${profile.userId||'无'}</span></div></div><div class="my-tab"><span class="active" data-other-tab="posts">Ta的发布(${myPosts.length})</span><span data-other-tab="likes">Ta的点赞(${actions.likes.length})</span><span data-other-tab="comments">Ta的评论(${actions.comments.length})</span></div><div id="otherTabContent"></div>`; document.getElementById("otherProfileContent").innerHTML = html; function renderPosts(){ let phtml = myPosts.map(p=>`<div class="record-item clickable" data-postid="${p.id}">📝 ${p.title} (👍${p.likeCount} 💬${p.commentCount})</div>`).join('') || "暂无"; document.getElementById("otherTabContent").innerHTML = phtml; document.querySelectorAll('[data-postid]').forEach(el=>{ el.onclick=()=>{ otherModal.style.display="none"; showPostDetail(parseInt(el.dataset.postid)); }; }); } function renderLikes(){ let lhtml = actions.likes.map(l=>`<div>❤️ 点赞了帖子 ${l.postId}</div>`).join('') || "暂无"; document.getElementById("otherTabContent").innerHTML = lhtml; } function renderComments(){ let chtml = actions.comments.map(c=>`<div>💬 评论了帖子 ${c.postId}: "${c.content}"</div>`).join('') || "暂无"; document.getElementById("otherTabContent").innerHTML = chtml; } renderPosts(); document.querySelectorAll('[data-other-tab]').forEach(tab=>{ tab.onclick = ()=>{ document.querySelectorAll('[data-other-tab]').forEach(t=>t.classList.remove('active')); tab.classList.add('active'); if(tab.dataset.otherTab === 'posts') renderPosts(); else if(tab.dataset.otherTab === 'likes') renderLikes(); else renderComments(); }; }); otherModal.style.display="flex";updateParticleZIndex(); setTimeout(addCloseButtonsToModals, 10); }
+    
+	async function register(phone, pwd, school) {
+	    if (phone === ADMIN_PHONE) { alert("该手机号已被管理员占用"); return false; }
+	    const response = await fetch(`${API_BASE}/register`, {
+	        method: 'POST',
+	        headers: { 'Content-Type': 'application/json' },
+	        body: JSON.stringify({ phone, password: pwd, school })
+	    });
+	    const data = await response.json();
+	    if (data.success) {
+	        currentUser = { phone: data.phone, school: data.school, isAdmin: false, userId: data.userId };
+	        localStorage.setItem("currentUser", JSON.stringify(currentUser));
+	        currentSchool = 'gznj';  // 强制设为贵州黔南经济学院
+	        renderAll(); updateUIBar(); closeModal(); updateOnlineStatus();
+	        return true;
+	    } else {
+	        alert(data.msg);
+	        return false;
+	    }
+	}
+	async function login(phone, pwd) {
+	    const response = await fetch(`${API_BASE}/login`, {
+	        method: 'POST',
+	        headers: { 'Content-Type': 'application/json' },
+	        body: JSON.stringify({ phone, password: pwd })
+	    });
+	    const data = await response.json();
+	    if (data.success) {
+	        currentUser = { phone: data.phone, school: data.school, isAdmin: data.isAdmin, userId: data.userId };
+	        localStorage.setItem("currentUser", JSON.stringify(currentUser));
+	        currentSchool = 'gznj';  // 强制设为贵州黔南经济学院
+	        renderAll(); updateUIBar(); closeModal(); updateOnlineStatus();
+	        return true;
+	    } else {
+	        alert(data.msg);
+	        return false;
+	    }
+	}
+	async function socialLoginAuto(phone) {
+	    // 先尝试用固定密码登录，不行则自动注册
+	    const res = await fetch(`${API_BASE}/login`, {
+	        method: 'POST',
+	        headers: { 'Content-Type': 'application/json' },
+	        body: JSON.stringify({ phone, password: '123456' })
+	    });
+	    let data = await res.json();
+	    if (!data.success) {
+	        // 登录失败则自动注册，使用默认密码
+	        const regRes = await fetch(`${API_BASE}/register`, {
+	            method: 'POST',
+	            headers: { 'Content-Type': 'application/json' },
+	            body: JSON.stringify({ phone, password: '123456', school: 'gznj' })
+	        });
+	        data = await regRes.json();
+	        if (!data.success) {
+	            alert('自动注册失败');
+	            return;
+	        }
+	    }
+	    currentUser = { phone: data.phone, school: data.school, isAdmin: data.isAdmin, userId: data.userId };
+	    localStorage.setItem("currentUser", JSON.stringify(currentUser));
+	    currentSchool = 'gznj';
+	    renderAll(); updateUIBar(); closeModal(); updateOnlineStatus();
+	}
+    function updateUIBar(){ let span=document.getElementById("usernameDisplay"), btn=document.getElementById("loginBtn"), myBtn=document.getElementById("myProfileBtn"); if(currentUser){ let profile=userProfiles[currentUser.phone]||{}; span.innerText=profile.nickname||currentUser.phone; btn.innerText="退出"; btn.onclick=()=>logout(); myBtn.style.display="inline-block"; myBtn.onclick=()=>{ renderMyProfile(); document.getElementById("myProfileModal").style.display="flex"; }; updateNotificationBadge(); } else { span.innerText="游客模式"; btn.innerText="登录/注册"; btn.onclick=()=>openModal(); myBtn.style.display="none"; } }
+    function logout(){ currentUser=null; localStorage.removeItem("currentUser"); currentSchool="gznj"; renderAll(); updateUIBar(); let stored=JSON.parse(localStorage.getItem("onlineUsers")||"{}"); delete stored[sessionId]; localStorage.setItem("onlineUsers",JSON.stringify(stored)); }
+    
+    let modal=document.getElementById("authModal"), profileModal=document.getElementById("myProfileModal"), otherModal=document.getElementById("otherProfileModal"), searchModal=document.getElementById("searchModal"), detailModal=document.getElementById("postDetailModal"), communityModalElem=document.getElementById("communityModal");
+    function openModal(){ modal.style.display="flex";updateParticleZIndex(); if(window.particlesJS) particlesJS("particles-cyber",{ particles:{ number:{value:60}, color:{value:"#0ff"}, shape:{type:"circle"}, opacity:{value:0.5}, size:{value:2}, line_linked:{enable:true,color:"#ff008c"}, move:{speed:1} } }); document.getElementById("particles-cyber").style.display="block";updateParticleZIndex(); }
+    function closeModal(){ modal.style.display="none"; document.getElementById("particles-cyber").style.display="none";updateParticleZIndex(); }
+	document.getElementById("closeModal").onclick = () => {
+	    closeModal();
+	    updateParticleZIndex();
+	};
+	document.getElementById("closeProfileModal").onclick = () => {
+	    profileModal.style.display = "none";
+	    updateParticleZIndex();
+	};
+	document.getElementById("closeOtherModal").onclick = () => {
+	    otherModal.style.display = "none";
+	    updateParticleZIndex();
+	};
+	document.getElementById("closeDetailModal").onclick = () => {
+	    detailModal.style.display = "none";
+	    updateParticleZIndex();
+	};
+    document.getElementById("closeSearchModal").onclick=()=>searchModal.style.display="none";
+	document.getElementById("closeSearchModal").onclick = () => {
+	    searchModal.style.display = "none";
+	    updateParticleZIndex();
+	};
+    document.getElementById("globalSearchBtn").onclick=()=>{ searchModal.style.display="flex"; document.getElementById("searchKeyword").value=""; document.getElementById("searchResults").innerHTML=""; };
+	document.getElementById("doSearch").onclick = () => {
+	    let kw = document.getElementById("searchKeyword").value.trim().toLowerCase();
+	    if (!kw) return;
+	    let postResults = globalPosts.filter(p => p.title.toLowerCase().includes(kw) || p.content.toLowerCase().includes(kw));
+	    // 用户搜索：昵称、手机号、ID
+	    let userResults = Object.keys(userProfiles).filter(phone => {
+	        let profile = userProfiles[phone];
+	        return profile.nickname?.toLowerCase().includes(kw) ||
+	               phone.includes(kw) ||
+	               (profile.userId && profile.userId.includes(kw));
+	    }).map(phone => userProfiles[phone]);
+	
+	    let html = `<h3>📰 帖子结果 (${postResults.length})</h3>` + postResults.map(p => `<div class="record-item clickable" data-postid="${p.id}">${p.title}</div>`).join('');
+	    html += `<h3>👥 用户结果 (${userResults.length})</h3>` + userResults.map(u => {
+	        let phone = Object.keys(userProfiles).find(k => userProfiles[k].nickname === u.nickname) || '';
+	        return `<div class="record-item clickable" data-userphone="${phone}">${u.nickname} (${u.phone || ''}) - ID: ${u.userId || '无'}</div>`;
+	    }).join('');
+	    document.getElementById("searchResults").innerHTML = html;
+	    document.querySelectorAll('[data-postid]').forEach(el => { el.onclick = () => { searchModal.style.display = "none"; showPostDetail(parseInt(el.dataset.postid)); }; });
+	    document.querySelectorAll('[data-userphone]').forEach(el => { el.onclick = () => { searchModal.style.display = "none"; viewUserProfile(el.dataset.userphone); }; });
+	};
+    document.getElementById("saveProfileBtn").onclick=function(){ if(!currentUser) return; let newNick = document.getElementById("editNickname").value.trim(); let newGender = document.getElementById("editGender").value; let newBio = document.getElementById("editBio").value.trim(); let profile = userProfiles[currentUser.phone] || { avatar:"https://randomuser.me/api/portraits/lego/1.jpg" }; profile.nickname = newNick || currentUser.phone; profile.gender = newGender; profile.bio = newBio || ""; userProfiles[currentUser.phone] = profile; localStorage.setItem("userProfiles", JSON.stringify(userProfiles)); renderMyProfile(); updateUIBar(); renderAll(); alert("资料已更新"); };
+    document.getElementById("randomAvatarBtn").onclick = function(){
+        let avatarUrl = `https://picsum.photos/200?random=${Math.random()}`;
+        if(currentUser) {
+            userProfiles[currentUser.phone] = { ...(userProfiles[currentUser.phone]||{}), avatar: avatarUrl };
+            localStorage.setItem("userProfiles", JSON.stringify(userProfiles));
+            renderMyProfile(); updateUIBar(); renderAll();
+        }
+    };
+    document.getElementById("uploadAvatarBtn").onclick=()=>document.getElementById("avatarFileInput").click();
+    document.getElementById("avatarFileInput").onchange=(e)=>{ if(e.target.files[0] && currentUser){ let reader=new FileReader(); reader.onload=(ev)=>{ userProfiles[currentUser.phone] = { ...(userProfiles[currentUser.phone]||{}), avatar: ev.target.result }; localStorage.setItem("userProfiles", JSON.stringify(userProfiles)); renderMyProfile(); updateUIBar(); renderAll(); }; reader.readAsDataURL(e.target.files[0]); } };
+    document.getElementById("tabLogin").onclick=()=>{ document.getElementById("loginForm").style.display="block"; document.getElementById("registerForm").style.display="none"; document.getElementById("tabLogin").classList.add("active-tab"); document.getElementById("tabRegister").classList.remove("active-tab"); };
+    document.getElementById("tabRegister").onclick=()=>{ document.getElementById("loginForm").style.display="none"; document.getElementById("registerForm").style.display="block"; document.getElementById("tabRegister").classList.add("active-tab"); document.getElementById("tabLogin").classList.remove("active-tab"); };
+    document.getElementById("doLogin").onclick=()=>{ let p=document.getElementById("loginPhone").value, pw=document.getElementById("loginPassword").value; if(p&&pw) login(p,pw); };
+    document.getElementById("doRegister").onclick=()=>{ let p=document.getElementById("regPhone").value, pw=document.getElementById("regPassword").value, sc=document.getElementById("regSchool").value; if(p&&/^\d{11}$/.test(p)&&pw) register(p,pw,sc); else alert("手机号11位"); };
+    document.getElementById("wechatLogin").onclick=()=>{ let phone=prompt("微信登录，请输入11位手机号"); if(phone && /^\d{11}$/.test(phone)) socialLoginAuto(phone); };
+    document.getElementById("qqLogin").onclick=()=>{ let phone=prompt("QQ登录，请输入11位手机号"); if(phone && /^\d{11}$/.test(phone)) socialLoginAuto(phone); };
+    let newPostMedia = { imageData: null, videoData: null };
+    document.getElementById("postImageFile")?.addEventListener("change", (e)=>{ let file=e.target.files[0]; if(file){ let reader=new FileReader(); reader.onload=(ev)=>{ newPostMedia.imageData=ev.target.result; document.getElementById("postImagePreview").innerHTML=`<img src="${ev.target.result}" class="image-preview">`; }; reader.readAsDataURL(file); } });
+    document.getElementById("postVideoFile")?.addEventListener("change", (e)=>{ let file=e.target.files[0]; if(file){ let reader=new FileReader(); reader.onload=(ev)=>{ newPostMedia.videoData=ev.target.result; document.getElementById("postVideoPreview").innerHTML=`<video controls width="150" src="${ev.target.result}"></video>`; }; reader.readAsDataURL(file); } });
+    function openNewPostModal(){ document.getElementById("newPostModal").style.display="flex";updateParticleZIndex(); newPostMedia={imageData:null, videoData:null}; document.getElementById("postImagePreview").innerHTML=""; document.getElementById("postVideoPreview").innerHTML=""; document.getElementById("postTitle").value=""; document.getElementById("postContent").value=""; setTimeout(addCloseButtonsToModals, 10); }
+    // 上传图片
+	document.getElementById("postImageFile")?.addEventListener("change", (e) => {
+	    let file = e.target.files[0];
+	    if (file) {
+	        let reader = new FileReader();
+	        reader.onload = (ev) => {
+	            newPostMedia.imageData = ev.target.result;
+	            document.getElementById("postImagePreview").innerHTML = `<img src="${ev.target.result}" class="image-preview">`;
+	        };
+	        reader.readAsDataURL(file);
+	    }
+	});
+	
+	// 上传视频
+	document.getElementById("postVideoFile")?.addEventListener("change", (e) => {
+	    let file = e.target.files[0];
+	    if (file) {
+	        let reader = new FileReader();
+	        reader.onload = (ev) => {
+	            newPostMedia.videoData = ev.target.result;
+	            document.getElementById("postVideoPreview").innerHTML = `<video controls width="150" src="${ev.target.result}"></video>`;
+	        };
+	        reader.readAsDataURL(file);
+	    }
+	});
+	document.getElementById("submitNewPost").onclick = async () => {
+	    let title = document.getElementById("postTitle").value.trim();
+	    let content = document.getElementById("postContent").value.trim();
+	    if (!title || !content) { alert("标题和内容不能为空"); return; }
+	    let images = newPostMedia.imageData ? [newPostMedia.imageData] : [];
+	    let video = newPostMedia.videoData || "";
+	
+	    // 调用后端 API
+	    const response = await fetch(`${API_BASE}/posts`, {
+	        method: 'POST',
+	        headers: { 'Content-Type': 'application/json' },
+	        body: JSON.stringify({
+	            title,
+	            content,
+	            images,
+	            video,
+	            author_id: currentUser?.phone || 'guest',
+	            author_nickname: userProfiles[currentUser?.phone]?.nickname || currentUser?.phone || '匿名'
+	        })
+	    });
+	    const result = await response.json();
+	    if (result.success) {
+	        // 重新加载帖子列表并刷新界面
+	        await initPosts();  // 重新从服务器拉取帖子
+	        renderAll();
+	        document.getElementById("newPostModal").style.display = "none";
+	    } else {
+	        alert('发布失败：' + (result.msg || '未知错误'));
+	    }
+	};
+	document.getElementById("closeNewPostModal").onclick = () => {
+	    document.getElementById("newPostModal").style.display = "none";
+	    updateParticleZIndex();
+	};
+    document.getElementById("notificationBell").addEventListener("click",()=>{ if(currentUser) { renderMyProfile(); document.getElementById("myProfileModal").style.display="flex"; document.getElementById("tabNotifications").click(); } else alert("请先登录"); });
+    
+    function addCloseButtonsToModals() {
+        document.querySelectorAll('.modal .cyber-modal').forEach(modalContent => {
+            if (!modalContent.querySelector('.modal-close-btn')) {
+                let closeIcon = document.createElement('i');
+                closeIcon.className = 'fas fa-times modal-close-btn';
+                closeIcon.onclick = function(e) {
+                    e.stopPropagation();
+                    modalContent.closest('.modal').style.display = 'none';
+                    updateParticleZIndex();
+                    if (modalContent.closest('#authModal')) {
+                        document.getElementById('particles-cyber').style.display = 'none';
+                    }
+                };
+                modalContent.appendChild(closeIcon);
+            }
+        });
+    }
+    addCloseButtonsToModals();
+
+    function initVisitCounter(){ let c=localStorage.getItem("globalVisitCount"); visitCount=c?parseInt(c)+1:1; localStorage.setItem("globalVisitCount",visitCount); document.getElementById("visitCount").innerText=visitCount; }
+    initVisitCounter();
+    let savedUser=localStorage.getItem("currentUser");
+    if(savedUser){ 
+    	currentUser=JSON.parse(savedUser);
+    	if(currentUser.school) currentSchool='gznj';  // 老用户也强制使用
+    }
+	(async () => {
+	    await renderAll();
+	    updateUIBar();
+	})();
+    setInterval(()=>{ if(currentUser) updateOnlineStatus(); cleanOfflineUsers(); renderOnlineList(); }, 5000);
+    renderOnlineList();
+	async function loadExpressData() {
+	    try {
+	        const res = await fetch(`${API_BASE}/express/${currentSchool}`);
+	        const orders = await res.json();
+	        // 将服务器返回的订单转换为前端需要的格式
+	        // 服务器字段：num, type, status, location, reward, address, receive_time,
+	        //           receiver_name, receiver_phone, publisher_phone, taker_phone, id
+	        // 前端需要：num, type, status, location, reward, address, receiveTime,
+	        //           receiverName, receiverPhone, publisherPhone, takerPhone, id
+	        const formattedOrders = orders.map(o => ({
+	            num: o.num,
+	            type: o.type || '普通',
+	            status: o.status || '待取',
+	            location: o.location || '',
+	            reward: o.reward,
+	            address: o.address,
+	            receiveTime: o.receive_time,
+	            receiverName: o.receiver_name,
+	            receiverPhone: o.receiver_phone,
+	            publisherPhone: o.publisher_phone,
+	            takerPhone: o.taker_phone,
+	            id: o.id   // 重要！用于后续的接单/删除请求
+	        }));
+	        // 用服务器数据替换当前学校的快递列表（注意不影响其他学校的缓存）
+	        if (!customExpress[currentSchool]) customExpress[currentSchool] = [];
+	        // 为了与原有逻辑兼容，我们把服务器数据放到 customExpress[currentSchool] 中
+	        // 同时也清理掉原有可能存在的重复旧数据（由 schoolData[currentSchool].express 管理的原生数据忽略掉）
+	        customExpress[currentSchool] = formattedOrders;
+	        // 同时将 schoolData[currentSchool].express 清空，避免重复显示（因为现在全部订单都由服务器管理）
+	        schoolData[currentSchool].express = [];
+	    } catch (e) {
+	        console.error('快递数据加载失败', e);
+	        // 降级：保留原本地数据
+	    }
+	}
+	async function loadSecondhandData() {
+	    try {
+	        const res = await fetch(`${API_BASE}/secondhand/${currentSchool}`);
+	        const items = await res.json();
+	        // 将服务器数据合并到 schoolData[currentSchool].secondhand
+	        schoolData[currentSchool].secondhand = items.map(item => ({
+	            name: item.name,
+	            price: item.price,
+	            seller: item.seller_nickname,
+	            desc: item.desc,
+	            media: item.media,
+	            publisherPhone: item.publisher_phone
+	        }));
+	        // 重新渲染该卡片
+	        const secondhandBody = document.getElementById("secondhandBody");
+	        if (secondhandBody) {
+	            renderAll(); // 简单粗暴重新渲染整个页面，但会打断用户操作，可以优化为只更新那块区域，这里为了省事先这样
+	        }
+	    } catch (e) {
+	        console.error('二手数据加载失败', e);
+	    }
+	}
+</script>
+<script>
+// 全局粒子特效（确保在 DOM 加载后执行）
+(function() {
+    function initParticles() {
+        const canvas = document.getElementById("globalParticlesCanvas");
+        if (!canvas) {
+            console.warn("Canvas not found");
+            return;
+        }
+        const ctx = canvas.getContext("2d");
+        let width, height;
+        let particles = [];
+        const PARTICLE_COUNT = 30;
+        let mouse = { x: null, y: null, radius: 120 };
+
+        function resize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+        window.addEventListener("resize", resize);
+        resize();
+
+        window.addEventListener("mousemove", function(e) {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+        window.addEventListener("mouseout", function() {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.6;
+                this.vy = (Math.random() - 0.5) * 0.6;
+                this.radius = Math.random() * 3 + 1.5;
+                this.color = `hsl(${Math.random() * 60 + 180}, 80%, 65%)`;
+            }
+            update() {
+                if (mouse.x && mouse.y) {
+                    let dx = mouse.x - this.x;
+                    let dy = mouse.y - this.y;
+                    let dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < mouse.radius) {
+                        let force = (mouse.radius - dist) / mouse.radius * 0.03;
+                        this.vx += dx * force;
+                        this.vy += dy * force;
+                    }
+                }
+                this.vx *= 0.99;
+                this.vy *= 0.99;
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
+            particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            // 连线
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    let dx = particles[i].x - particles[j].x;
+                    let dy = particles[i].y - particles[j].y;
+                    let dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 70) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(100, 200, 255, ${0.08 * (1 - dist / 90)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
+    }
+
+    // 确保 DOM 就绪
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initParticles);
+    } else {
+        initParticles();
+    }
+})();
+</script>
+</body>
+</html>
